@@ -1,9 +1,6 @@
-export default function Button() {
+export default function Button({ buttonFn }: { buttonFn: () => void }) {
   return (
-    <button
-      className="bg-white text-black"
-      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-    >
+    <button className="bg-white text-black" onClick={buttonFn}>
       Click me
     </button>
   );
