@@ -10,11 +10,11 @@ export function registerStaticDataStreamOut(io: Server, socket: Socket): void {
 
     // Create a transform stream to introduce a delay
     const delayStream = new Transform({
-      objectMode: true,
+      objectMode: true, // put it into object mode so that the server knows to read it as an array
       transform(chunk, encoding, callback) {
         setTimeout(() => {
           socket.emit("static/receive-data-stream", chunk);
-          callback();
+          callback(); // this function is used to signal to the stream that the current chunk is done, and that it should move on to the next
         }, 50);
       },
     });

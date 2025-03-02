@@ -7,7 +7,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // Replace with your frontend's origin
+    origin: "http://localhost:5173",
     methods: ["GET", "POST"],
     credentials: true,
   })
@@ -19,7 +19,6 @@ app.get("/test", (req: Request, res: Response) => {
 
 const server = createServer(app);
 const io = initializeWebSockets(server);
-// Initialize Socket.IO with the server
 
 // make the websocket a global variable that is available to all
 app.set("io", io);
