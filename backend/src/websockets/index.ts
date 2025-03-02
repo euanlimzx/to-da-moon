@@ -1,16 +1,17 @@
 import { Server as HttpServer } from "http";
-import { Server, Socket } from "socket.io";
+import { Server } from "socket.io";
 import { registerStaticDataStreamOut } from "./staticDataStreamOut";
+import { DataStreamServer, DataStreamSocket } from "./types";
 
 export function initializeWebSockets(httpServer: HttpServer): Server {
-  const io = new Server(httpServer, {
+  const io: DataStreamServer = new Server(httpServer, {
     cors: {
       origin: process.env.CORS_ORIGIN || "http://localhost:5173",
       methods: ["GET", "POST"],
     },
   });
 
-  io.on("connection", (socket: Socket) => {
+  io.on("connection", (socket: DataStreamSocket) => {
     console.log("connected");
     // register the relevant event handlers
     registerStaticDataStreamOut(io, socket);
