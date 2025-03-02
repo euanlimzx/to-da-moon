@@ -1,15 +1,15 @@
 import { Socket, Server } from "socket.io";
 import {
-  DataStreamClientToServerEvents,
-  DataStreamServerToClientEvents,
+  StaticDataStreamClientToServerEvents,
+  StaticDataStreamServerToClientEvents,
 } from "../../../types/socketRequestTypes";
 
-export type DataStreamSocket = Socket<
-  DataStreamClientToServerEvents,
-  DataStreamServerToClientEvents
+export type StaticDataStreamSocket = Socket<
+  StaticDataStreamClientToServerEvents,
+  StaticDataStreamServerToClientEvents
 >;
 
-export type DataStreamServer = Server<
-  DataStreamClientToServerEvents,
-  DataStreamServerToClientEvents
+export type StaticDataStreamServer = Server<
+  StaticDataStreamClientToServerEvents,
+  StaticDataStreamServerToClientEvents
 >;

@@ -2,11 +2,11 @@ import { Server, Socket } from "socket.io";
 import { Transform } from "stream";
 import fs from "fs";
 import { parse } from "csv-parse";
-import { DataStreamSocket } from "./types";
+import { StaticDataStreamSocket } from "./types";
 
 export function registerStaticDataStreamOut(
   io: Server,
-  socket: DataStreamSocket
+  socket: StaticDataStreamSocket
 ): void {
   socket.on("static/get-data-stream", (file_path) => {
     // will use message to tell us which file path to read the CSV from
