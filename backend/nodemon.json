@@ -1,0 +1,5 @@
+{
+  "watch": ["src"],
+  "ext": "ts",
+  "exec": "find ./src -type f -name \"*.js\" -delete && concurrently \"npx tsc --watch\" \"ts-node src/index.ts\""
+}
