@@ -20,3 +20,8 @@ export type LiveDataStreamSocket = Socket<
   LiveDataStreamMQTTClientToServer,
   LiveDataStreamServerToClient
 >;
+
+export type LiveDataStreamServer = Server<
+  LiveDataStreamMQTTClientToServer,
+  LiveDataStreamServerToClient
+>;

@@ -2,10 +2,10 @@ import { Server, Socket } from "socket.io";
 import { Transform } from "stream";
 import fs from "fs";
 import { parse } from "csv-parse";
-import { StaticDataStreamSocket } from "./types";
+import { StaticDataStreamServer, StaticDataStreamSocket } from "./types";
 
 export function registerStaticDataStreamOut(
-  io: Server,
+  io: StaticDataStreamServer,
   socket: StaticDataStreamSocket
 ): void {
   socket.on("static/get-data-stream", (file_path) => {

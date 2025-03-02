@@ -18,5 +18,5 @@ export interface LiveDataStreamMQTTClientToServer {
 }
 
 export interface LiveDataStreamServerToClient {
-  "live/broadcast-data-stream": (chunk: number[]) => void;
+  "live/broadcast-data-stream": (mqttData: MqttData) => void;
 }
