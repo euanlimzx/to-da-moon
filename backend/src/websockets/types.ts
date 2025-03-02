@@ -2,6 +2,8 @@ import { Socket, Server } from "socket.io";
 import {
   StaticDataStreamClientToServerEvents,
   StaticDataStreamServerToClientEvents,
+  LiveDataStreamMQTTClientToServer,
+  LiveDataStreamServerToClient,
 } from "../../../types/socketRequestTypes";
 
 export type StaticDataStreamSocket = Socket<
@@ -12,4 +14,9 @@ export type StaticDataStreamSocket = Socket<
 export type StaticDataStreamServer = Server<
   StaticDataStreamClientToServerEvents,
   StaticDataStreamServerToClientEvents
+>;
+
+export type LiveDataStreamSocket = Socket<
+  LiveDataStreamMQTTClientToServer,
+  LiveDataStreamServerToClient
 >;
