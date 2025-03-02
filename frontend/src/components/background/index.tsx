@@ -8,7 +8,7 @@ export default function Background() {
   }, []);
   return (
     <div
-      className="w-screen absolute -z-10 bg-gradient-to-t from-sky-500 to-indigo-500 text-9xl"
+      className="w-screen absolute -z-10 bg-gradient-to-t from-sky-500 to-indigo-900 text-9xl"
       style={{ height: `${backgroundHeight * 100}vh` }}
     ></div>
   );

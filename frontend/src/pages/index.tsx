@@ -24,8 +24,9 @@ export default function Home() {
   //we need to scale based on the max altitude we predict the rocket will achieve
   //we should probably not shift the screen down to avoid jank
   //we probably want to sample values so we don't spam our scroll function
+  //we probably want to do thresholds with even intervals to have a smoother (instead of more realistic) flow
   function buttonFn() {
-    const arr = [0.1, 0.2, 0.3, 0.7, 0.9];
+    const arr = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9];
     arr.forEach((value, index) => {
       const height =
         (1 - value) * backgroundHeight * document.body.scrollHeight;
@@ -40,7 +41,7 @@ export default function Home() {
         } else {
           setRocketHeight(calculatePixelHeight(0.45));
         }
-      }, index * 400); // Adding a delay between scrolls, won't be visible / won't work otherwise
+      }, index * 100); // Adding a delay between scrolls, won't be visible / won't work otherwise
     });
   }
 
