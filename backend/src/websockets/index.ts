@@ -7,7 +7,7 @@ import { registerLiveDataStream } from "./liveDataStreamIn";
 export function initializeWebSockets(httpServer: HttpServer): Server {
   const io: StaticDataStreamServer = new Server(httpServer, {
     cors: {
-      origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+      origin: "*", //todo @Euan, configure this to allow from our frontend only
       methods: ["GET", "POST"],
     },
   });
