@@ -5,6 +5,7 @@ import { backgroundHeight } from '@/constants'
 import { calculatePixelHeight } from '@/utils'
 import { useEffect, useState } from 'react'
 import { socket } from '../socket'
+import Button from '@/components/button'
 
 export default function Home() {
     const [rocketHeight, setRocketHeight] = useState(0)
@@ -51,7 +52,9 @@ export default function Home() {
             <Background />
             <Rocket rocketHeight={rocketHeight} />
             <div className="flex h-screen w-screen items-center justify-center">
-                <Dashboard buttonFn={buttonFn} />
+                <Dashboard>
+                    <Button buttonFn={buttonFn} />
+                </Dashboard>
             </div>
         </>
     )
