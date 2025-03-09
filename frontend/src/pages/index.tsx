@@ -9,22 +9,15 @@ import { socket } from '../socket'
 export default function Home() {
     const [rocketHeight, setRocketHeight] = useState(0)
     const [isConnected, setIsConnected] = useState(socket.connected)
+    console.log(socket.connected)
     useEffect(() => {
-        function onConnect() {
-            console.log('fuck')
-            setIsConnected(true)
-        }
-
-        function onDisconnect() {
-            setIsConnected(false)
-        }
-
-        socket.on('connect', onConnect)
-        socket.on('disconnect', onDisconnect)
-
+        socket.on('live/broadcast-data-stream', (message) =>
+            console.log(message)
+        )
         return () => {
-            socket.off('connect', onConnect)
-            socket.off('disconnect', onDisconnect)
+            socket.on('live/broadcast-data-stream', (message) =>
+                console.log(message)
+            )
         }
     }, [])
 
