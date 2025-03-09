@@ -2,39 +2,49 @@ import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { socket } from '../../socket'
 import Dashboard from '@/components/dashboard'
+import Button from '@/components/button'
+import { Gauge } from '@/components/gauge'
 
 export default function Page() {
-    const [isConnected, setIsConnected] = useState(socket.connected)
-    console.log(socket.connected)
+    const [values, setValues] = useState<string[]>([])
 
     const router = useRouter()
+
+    // Fetching the data and setting the state
     useEffect(() => {
-        socket.on('static/receive-data-stream', (message: string[]) =>
+        // Set up the socket listener to receive the data stream
+        socket.on('static/receive-data-stream', (message: string[]) => {
+            setValues(message) // Update state with the latest values
             console.log(message)
-        )
+        })
+
+        // Clean up the socket listener on component unmount
         return () => {
-            socket.on('static/receive-data-stream', (message: string[]) =>
-                console.log(message)
-            )
+            socket.off('static/receive-data-stream') // Unsubscribe to avoid memory leaks
         }
     }, [])
+
+    // Emit an event to get the data stream based on the slug in the URL
     const buttonFn = () => {
         console.log(router.query.slug)
         socket.emit('static/get-data-stream', router.query.slug)
     }
-    return <Dashboard buttonFn={buttonFn} />
-}
 
-// ;[
-//     '1713734909236',
-//     '482.60169',
-//     '586.3529',
-//     '-4.77855',
-//     '-61.87105',
-//     '1.03304',
-//     '339.3728',
-//     '34.07698',
-//     '98.41807',
-//     '3557.51375',
-//     '13.36228',
-// ]
+    return (
+        <Dashboard>
+            <>
+                <Button buttonFn={buttonFn} />
+                {values.map((value) => {
+                    return (
+                        <Gauge
+                            key={value}
+                            value={parseInt(value)}
+                            size="large"
+                            showValue={true}
+                        />
+                    )
+                })}
+            </>
+        </Dashboard>
+    )
+}
