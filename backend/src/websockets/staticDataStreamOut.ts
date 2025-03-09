@@ -1,6 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { Transform } from "stream";
 import fs from "fs";
+import path from "path"; // Import path module
 import { parse } from "csv-parse";
 import { StaticDataStreamServer, StaticDataStreamSocket } from "./types";
 
@@ -9,8 +10,7 @@ export function registerStaticDataStreamOut(
   socket: StaticDataStreamSocket
 ): void {
   socket.on("static/get-data-stream", (file_path) => {
-    // will use message to tell us which file path to read the CSV from
-    console.log(file_path);
+    const relativeFilePath = path.join(__dirname, `../data/${file_path}.csv`);
 
     // Create a transform stream to introduce a delay
     const delayStream = new Transform({
@@ -24,9 +24,7 @@ export function registerStaticDataStreamOut(
     });
 
     // Read and parse the CSV file, then pipe through the delay stream
-    fs.createReadStream(
-      "/Users/shawnwei/Developer/Personal/to-da-moon/backend/src/data/pt_values.csv"
-    )
+    fs.createReadStream(relativeFilePath)
       .pipe(parse({ delimiter: ",", from_line: 2 }))
       .pipe(delayStream)
       .on("finish", () => {
