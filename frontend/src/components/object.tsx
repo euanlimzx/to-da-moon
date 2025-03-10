@@ -229,7 +229,12 @@ const Object = () => {
         }
     }, [])
 
-    return <canvas ref={canvasRef} style={{ width: '70vw', height: '70vh' }} />
+    return (
+        <canvas
+            ref={canvasRef}
+            style={{ width: '70vw', height: '70vh', zIndex: 1000 }}
+        />
+    )
 }
 
 export default Object
