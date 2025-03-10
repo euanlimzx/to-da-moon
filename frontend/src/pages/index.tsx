@@ -51,12 +51,12 @@ export default function Home() {
     return (
         <>
             <Background />
+            <Object />
             <Rocket rocketHeight={rocketHeight} />
             <div className="flex h-screen w-screen items-center justify-center">
                 <Dashboard>
                     <Button buttonFn={buttonFn} />
                 </Dashboard>
-                <Object />
             </div>
         </>
     )
