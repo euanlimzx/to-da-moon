@@ -6,15 +6,17 @@ import { calculatePixelHeight } from '@/utils'
 import { useEffect, useState } from 'react'
 import { socket } from '../socket'
 import Button from '@/components/button'
+import { Gauge } from '@/components/gauge'
 
 export default function Home() {
     const [rocketHeight, setRocketHeight] = useState(0)
-    const [isConnected, setIsConnected] = useState(socket.connected)
-    console.log(socket.connected)
+    const [values, setValues] = useState([])
     useEffect(() => {
-        socket.on('live/broadcast-data-stream', (message) =>
+        socket.on('live/broadcast-data-stream', (message) => {
+            const val = Object.values(message)
+            setValues(val)
             console.log(message)
-        )
+        })
         return () => {
             socket.on('live/broadcast-data-stream', (message) =>
                 console.log(message)
@@ -53,7 +55,19 @@ export default function Home() {
             <Rocket rocketHeight={rocketHeight} />
             <div className="flex h-screen w-screen items-center justify-center">
                 <Dashboard>
-                    <Button buttonFn={buttonFn} />
+                    <>
+                        <Button buttonFn={buttonFn} />
+                        {values.map((value) => {
+                            return (
+                                <Gauge
+                                    key={value}
+                                    value={parseInt(value)}
+                                    size="large"
+                                    showValue={true}
+                                />
+                            )
+                        })}
+                    </>
                 </Dashboard>
             </div>
         </>
