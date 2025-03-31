@@ -4,17 +4,8 @@ import { socket } from '../../socket'
 import Dashboard from '@/components/dashboard'
 import Button from '@/components/button'
 import LinearProgress from '@/components/dashboard/linearProgress'
+import LinearGraph from '@/components/dashboard/linearGraph'
 import { Gauge } from '@/components/gauge'
-import {
-    LineChart,
-    Line,
-    XAxis,
-    YAxis,
-    CartesianGrid,
-    Tooltip,
-    Legend,
-    ResponsiveContainer,
-} from 'recharts'
 
 export default function Page() {
     const [values, setValues] = useState<string[]>([])
@@ -63,23 +54,8 @@ export default function Page() {
         <Dashboard>
             <>
                 <Button buttonFn={buttonFn} />
-                <div style={{ width: '100%', height: 300 }}>
-                    <ResponsiveContainer width="100%" height="100%">
-                        <LineChart data={data}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="time" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend />
-                            <Line
-                                type="monotone"
-                                dataKey="value"
-                                stroke="white"
-                            />
-                        </LineChart>
-                    </ResponsiveContainer>
-                </div>
-                <LinearProgress/>
+                <LinearGraph data={data} />
+                <LinearProgress />
                 {values.map((value) => {
                     return (
                         <Gauge
