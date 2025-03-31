@@ -9,13 +9,15 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "dat.gui": "^0.7.9",
+    "@react-three/drei": "^10.0.5",
     "gsap": "^3.12.7",
+    "leva": "^0.10.0",
+    "motion": "^12.6.2",
     "next": "15.1.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "three": "^0.174.0",
-    "socket.io-client": "^4.8.1"
+    "socket.io-client": "^4.8.1",
+    "three": "^0.174.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
