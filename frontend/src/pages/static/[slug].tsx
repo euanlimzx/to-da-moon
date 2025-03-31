@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { socket } from '../../socket'
 import Dashboard from '@/components/dashboard'
 import Button from '@/components/button'
+import LinearProgress from '@/components/dashboard/linearProgress'
 import { Gauge } from '@/components/gauge'
 import {
     LineChart,
@@ -78,6 +79,7 @@ export default function Page() {
                         </LineChart>
                     </ResponsiveContainer>
                 </div>
+                <LinearProgress/>
                 {values.map((value) => {
                     return (
                         <Gauge
