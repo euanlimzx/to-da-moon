@@ -17,6 +17,7 @@ import {
 
 export default function Page() {
     const [values, setValues] = useState<string[]>([])
+    const [error, setError] = useState<string | null>(null)
     const [data, setData] = useState([])
 
     const router = useRouter()
@@ -35,14 +36,24 @@ export default function Page() {
             console.log(data)
         })
 
+        // anything error / finish causing stream to end
+        socket.on('static/receive-data-stream-end', (message: string) => {
+            if (message != 'Finished streaming data') {
+                setError(message) // Update state with the error message
+                console.log(message)
+            }
+        })
         // Clean up the socket listener on component unmount
         return () => {
             socket.off('static/receive-data-stream') // Unsubscribe to avoid memory leaks
+            socket.off('static/receive-data-stream-end') // Unsubscribe to avoid memory leaks
         }
     }, [])
 
+    // do we also need to handle when same data is requested again or this doesn't matter?
     // Emit an event to get the data stream based on the slug in the URL
     const buttonFn = () => {
+        setError(null)
         console.log(router.query.slug)
         socket.emit('static/get-data-stream', router.query.slug)
     }
@@ -77,6 +88,11 @@ export default function Page() {
                         />
                     )
                 })}
+                {error && (
+                    <div className="align-center flex justify-center text-red-500">
+                        {error}
+                    </div>
+                )}
             </>
         </Dashboard>
     )
