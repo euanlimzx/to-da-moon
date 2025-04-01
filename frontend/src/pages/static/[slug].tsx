@@ -79,7 +79,6 @@ export default function Page() {
                         </LineChart>
                     </ResponsiveContainer>
                 </div>
-                <LinearProgress/>
                 {values.map((value) => {
                     return (
                         <Gauge
@@ -90,6 +89,9 @@ export default function Page() {
                         />
                     )
                 })}
+                <div className="align-center flex justify-center">
+                    <LinearProgress percent={50} colorHash="#7cc0ea"/>
+                </div>
                 {error && (
                     <div className="align-center flex justify-center text-red-500">
                         {error}
