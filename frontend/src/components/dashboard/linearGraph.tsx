@@ -1,4 +1,3 @@
-import { useState, useEffect, useRef } from 'react'
 import {
     LineChart,
     CartesianGrid,
@@ -8,7 +7,7 @@ import {
     Line,
 } from 'recharts'
 
-function Chart({ data }: { data: number[] }) {
+function Chart({ data }: { data: { [key: string]: number }[] }) {
     return (
         <div>
             <LineChart

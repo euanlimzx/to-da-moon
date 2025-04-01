@@ -14,7 +14,7 @@ import { Gauge } from '@/components/gauge'
 export default function Page() {
     const [values, setValues] = useState<string[]>([])
     const [error, setError] = useState<string | null>(null)
-    const [data, setData] = useState([]) //this is a placeholder for testing, we eventually want to have multiple data streams
+    const [data, setData] = useState<{ [key: string]: number }[]>([]) //this is a placeholder for testing, we eventually want to have multiple data streams
 
     const router = useRouter()
 
@@ -26,7 +26,7 @@ export default function Page() {
             setData((prevData) => {
                 const newData = [
                     ...prevData,
-                    { 'Fuel-Tank': parseInt(message[1]) },
+                    { 'Fuel-Tank': parseInt(message[1]) }, //todo @euan we should probably have a const files for column values
                 ]
                 console.log(newData)
                 if (newData.length > 30) {
