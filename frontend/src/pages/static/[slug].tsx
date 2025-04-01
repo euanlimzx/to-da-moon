@@ -1,16 +1,20 @@
 import { useRouter } from 'next/router'
+import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 import { socket } from '../../socket'
 import Dashboard from '@/components/dashboard'
 import Button from '@/components/button'
 import LinearProgress from '@/components/dashboard/linearProgress'
-import LinearGraph from '@/components/dashboard/linearGraph'
+const LinearGraph = dynamic(
+    () => import('@/components/dashboard/linearGraph'),
+    { ssr: false }
+)
 import { Gauge } from '@/components/gauge'
 
 export default function Page() {
     const [values, setValues] = useState<string[]>([])
     const [error, setError] = useState<string | null>(null)
-    const [data, setData] = useState([])
+    const [data, setData] = useState([]) //this is a placeholder for testing, we eventually want to have multiple data streams
 
     const router = useRouter()
 
@@ -19,13 +23,17 @@ export default function Page() {
         // Set up the socket listener to receive the data stream
         socket.on('static/receive-data-stream', (message: string[]) => {
             setValues(message) // Update state with the latest values
-            console.log(parseInt(message[0]))
             setData((prevData) => {
-                const newData = [...prevData, parseInt(message[0])]
-                console.log(newData) // Log the updated data array
+                const newData = [
+                    ...prevData,
+                    { 'Fuel-Tank': parseInt(message[1]) },
+                ]
+                console.log(newData)
+                if (newData.length > 30) {
+                    newData.shift()
+                }
                 return newData
             })
-            console.log(data)
         })
 
         // anything error / finish causing stream to end
@@ -46,7 +54,6 @@ export default function Page() {
     // Emit an event to get the data stream based on the slug in the URL
     const buttonFn = () => {
         setError(null)
-        console.log(router.query.slug)
         socket.emit('static/get-data-stream', router.query.slug)
     }
 
