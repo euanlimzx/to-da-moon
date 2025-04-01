@@ -90,7 +90,7 @@ export default function Page() {
                     )
                 })}
                 <div className="align-center flex justify-center">
-                    <LinearProgress percent={50} colorHash="#7cc0ea"/>
+                    <LinearProgress percent={50}/>
                 </div>
                 {error && (
                     <div className="align-center flex justify-center text-red-500">
