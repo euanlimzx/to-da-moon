@@ -1,32 +1,38 @@
 {
-  "name": "to-da-moon",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "antd": "^5.24.5",
-    "next": "^15.2.4",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "recharts": "^2.15.1",
-    "socket.io-client": "^4.8.1"
-  },
-  "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.1.7",
-    "postcss": "^8",
-    "prettier": "^3.5.2",
-    "prettier-plugin-tailwindcss": "^0.6.11",
-    "tailwindcss": "^3.4.1",
-    "typescript": "^5"
-  }
+    "name": "to-da-moon",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev --turbopack",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "@react-three/drei": "^10.0.5",
+        "@three.ez/instanced-mesh": "^0.3.1",
+        "gsap": "^3.12.7",
+        "leva": "^0.10.0",
+        "motion": "^12.6.2",
+        "antd": "^5.24.5",
+        "next": "^15.2.4",
+        "react": "^19.0.0",
+        "socket.io-client": "^4.8.1",
+        "three": "^0.174.0",
+        "three-csg-ts": "^3.1.6",
+        "recharts": "^2.15.1"
+    },
+    "devDependencies": {
+        "@eslint/eslintrc": "^3",
+        "@types/node": "^20",
+        "@types/react": "^19",
+        "@types/react-dom": "^19",
+        "eslint": "^9",
+        "eslint-config-next": "15.1.7",
+        "postcss": "^8",
+        "prettier": "^3.5.2",
+        "prettier-plugin-tailwindcss": "^0.6.11",
+        "tailwindcss": "^3.4.1",
+        "typescript": "^5"
+    }
 }

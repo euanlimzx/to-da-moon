@@ -12,7 +12,7 @@ export function registerStaticDataStreamOut(
 ): void {
   try {
     //should add handling in case a stream is not empty before another request to stream csv data is made
-    //can cancel the pevious stream on new stream emit. 
+    //can cancel the pevious stream on new stream emit.
     socket.on("static/get-data-stream", (file_path) => {
       const relativeFilePath = path.join(__dirname, `../data/${file_path}.csv`);
 
@@ -40,7 +40,10 @@ export function registerStaticDataStreamOut(
         .pipe(delayStream)
         .on("finish", () => {
           console.log("Finished streaming data");
-          socket.emit("static/receive-data-stream-end", "Finished streaming data");
+          socket.emit(
+            "static/receive-data-stream-end",
+            "Finished streaming data"
+          );
         })
         .on("error", (error) => {
           console.error("Error while streaming data:", error.message);
