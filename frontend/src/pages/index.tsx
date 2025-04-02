@@ -1,8 +1,5 @@
 import Background from '@/components/background'
 import Dashboard from '@/components/dashboard'
-import Rocket from '@/components/rocket'
-import { backgroundHeight } from '@/constants'
-import { calculatePixelHeight } from '@/utils'
 import { useEffect, useState } from 'react'
 import { socket } from '../socket'
 import Button from '@/components/button'
@@ -11,6 +8,7 @@ import { Gauge } from '@/components/gauge'
 export default function Home() {
     const [rocketHeight, setRocketHeight] = useState(0)
     const [values, setValues] = useState([])
+
     useEffect(() => {
         socket.on('live/broadcast-data-stream', (message) => {
             const val = Object.values(message)
@@ -24,39 +22,27 @@ export default function Home() {
         }
     }, [])
 
-    //This is an example of how we can dynamically render the page height based on the current position of the rocket
-    //we need to scale based on the max altitude we predict the rocket will achieve
-    //we should probably not shift the screen down to avoid jank
-    //we probably want to sample values so we don't spam our scroll function
-    //we probably want to do thresholds with even intervals to have a smoother (instead of more realistic) flow
-    function buttonFn() {
-        const arr = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
-        arr.forEach((value, index) => {
-            const height =
-                (1 - value) * backgroundHeight * document.body.scrollHeight
-            setTimeout(() => {
-                window.scrollTo({
-                    top: height,
-                    behavior: 'smooth',
-                })
-                console.log(value)
-                if (value <= 0.45) {
-                    setRocketHeight(calculatePixelHeight(value))
-                } else {
-                    setRocketHeight(calculatePixelHeight(0.45))
-                }
-            }, index * 100) // Adding a delay between scrolls, won't be visible / won't work otherwise
-        })
-    }
-
     return (
         <>
-            <Background />
-            <Rocket rocketHeight={rocketHeight} />
+            <Background height={rocketHeight} />
             <div className="flex h-screen w-screen items-center justify-center">
                 <Dashboard>
                     <>
-                        <Button buttonFn={buttonFn} />
+                        {/* no error handling here yet, but increasing the button past the array index will cause it to go out of bounds 
+            
+                        that should not be an issue with the final web app since we are changing the gradient based on altitue -- we will never go past the end of the array
+                        */}
+                        <button
+                            onClick={() =>
+                                setRocketHeight(
+                                    (intialRocketHeight) =>
+                                        intialRocketHeight + 1
+                                )
+                            }
+                            className="bg-black"
+                        >
+                            Go higher
+                        </button>
                         {values.map((value) => {
                             return (
                                 <Gauge
