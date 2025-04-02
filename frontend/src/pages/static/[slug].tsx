@@ -62,7 +62,6 @@ export default function Page() {
             <>
                 <Button buttonFn={buttonFn} />
                 <LinearGraph data={data} />
-                <LinearProgress />
                 {values.map((value) => {
                     return (
                         <Gauge
@@ -73,6 +72,7 @@ export default function Page() {
                         />
                     )
                 })}
+                
                 {error && (
                     <div className="align-center flex justify-center text-red-500">
                         {error}

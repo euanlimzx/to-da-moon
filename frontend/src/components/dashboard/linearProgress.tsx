@@ -1,10 +1,29 @@
 import React from 'react'
-import { Progress } from 'antd'
+import { Flex, Progress } from 'antd'
+import type { ProgressProps } from 'antd/es/progress'
+
+interface LinearProgressProps {
+    percent: number
+    trailColor ?: string
+}
+
+const twoColors: ProgressProps['strokeColor'] = {
+    '60%': '#507CFF',
+    '100%': "#C0D7FA"
+};
 
 
-const LinearProgress = () => {
+const LinearProgress = ( {percent, trailColor = "#808080"} : LinearProgressProps) => {
   return (
-    <Progress percent={100} status="active" />
+    <Flex gap="small" vertical>
+        <Progress
+            percent={percent}
+            percentPosition={{ align: 'end', type: 'inner' }}
+            size={[400, 20]}
+            strokeColor={twoColors}
+            trailColor={trailColor}
+        />
+    </Flex>
   )
 }
 
