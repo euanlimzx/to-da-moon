@@ -4,6 +4,7 @@ import type { ProgressProps } from 'antd/es/progress'
 
 interface LinearProgressProps {
     percent: number
+    strokeWidth: number
     trailColor?: string
 }
 
@@ -14,14 +15,16 @@ const twoColors: ProgressProps['strokeColor'] = {
 
 const LinearProgress = ({
     percent,
+    strokeWidth = 15,
     trailColor = 'rgba(0, 0, 0, 0.5)',
 }: LinearProgressProps) => {
     return (
-        <Flex gap="small" vertical>
+        <Flex gap="small" vertical className="w-full">
             <Progress
                 percent={percent}
                 percentPosition={{ align: 'end', type: 'inner' }}
-                size={[400, 20]}
+                size="default"
+                strokeWidth={strokeWidth}
                 strokeColor={twoColors}
                 trailColor={trailColor}
             />
