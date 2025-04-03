@@ -58,27 +58,26 @@ export default function Page() {
     }
 
     return (
-        <Dashboard>
-            <>
-                <Button buttonFn={buttonFn} />
-                <LinearGraph data={data} />
-                {values.map((value) => {
-                    return (
-                        <Gauge
-                            key={value}
-                            value={parseInt(value)}
-                            size="large"
-                            showValue={true}
-                        />
-                    )
-                })}
-                
-                {error && (
-                    <div className="align-center flex justify-center text-red-500">
-                        {error}
-                    </div>
-                )}
-            </>
-        </Dashboard>
+        <>
+            <Dashboard />
+            <Button buttonFn={buttonFn} />
+            <LinearGraph data={data} />
+            {values.map((value) => {
+                return (
+                    <Gauge
+                        key={value}
+                        value={parseInt(value)}
+                        size="large"
+                        showValue={true}
+                    />
+                )
+            })}
+
+            {error && (
+                <div className="align-center flex justify-center text-red-500">
+                    {error}
+                </div>
+            )}
+        </>
     )
 }

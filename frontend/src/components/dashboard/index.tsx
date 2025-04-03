@@ -1,14 +1,18 @@
-import { ReactElement } from 'react'
-import Object from '@/components/rocket-object'
-import LinearProgress from '@/components/dashboard/linearProgress'
+import { useState, ReactElement } from 'react'
 import Timeline from './timeline'
-export default function Dashboard({ children }: { children: ReactElement }) {
+import Overview from './overview'
+export default function Dashboard() {
+    const numStages = 5
+    const [currStage, setCurrStage] = useState(3)
+    const [isActive, setIsActive] = useState(true)
     return (
-        <div className="fixed">
-            <Timeline />
-            <Object />
-            <LinearProgress percent={50} />
-            {children}
+        <div className="absolute z-50 h-screen w-screen p-10">
+            <Timeline
+                numStages={numStages}
+                currStage={currStage}
+                isActive={isActive}
+            />
+            <Overview />
         </div>
     )
 }

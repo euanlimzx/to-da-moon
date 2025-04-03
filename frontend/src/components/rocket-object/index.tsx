@@ -44,7 +44,7 @@ const Lights = () => {
 
 const Object = () => {
     return (
-        <div id="world" style={{ width: '80vw', height: '80vh' }}>
+        <div id="world" style={{ width: '130vw', height: '100Vh' }}>
             <Canvas
                 shadows
                 camera={{ position: [0, 50, 400], fov: 60, near: 1, far: 950 }}

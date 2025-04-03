@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { socket } from '../socket'
 import Button from '@/components/button'
 import { Gauge } from '@/components/gauge'
+import Object from '@/components/rocket-object'
 
 export default function Home() {
     const [rocketHeight, setRocketHeight] = useState(0)
@@ -26,35 +27,35 @@ export default function Home() {
         <>
             <Background height={rocketHeight} />
             <div className="flex h-screen w-screen items-center justify-center">
-                <Dashboard>
-                    <>
-                        {/* no error handling here yet, but increasing the button past the array index will cause it to go out of bounds 
+                <Dashboard />
+                <div className="absolute z-50 flex h-full w-full items-end">
+                    {/* no error handling here yet, but increasing the button past the array index will cause it to go out of bounds 
             
                         that should not be an issue with the final web app since we are changing the gradient based on altitue -- we will never go past the end of the array
                         */}
-                        <button
-                            onClick={() =>
-                                setRocketHeight(
-                                    (intialRocketHeight) =>
-                                        intialRocketHeight + 1
-                                )
-                            }
-                            className="bg-black"
-                        >
-                            Go higher
-                        </button>
-                        {values.map((value) => {
-                            return (
-                                <Gauge
-                                    key={value}
-                                    value={parseInt(value)}
-                                    size="large"
-                                    showValue={true}
-                                />
+                    <button
+                        onClick={() =>
+                            setRocketHeight(
+                                (intialRocketHeight) => intialRocketHeight + 1
                             )
-                        })}
-                    </>
-                </Dashboard>
+                        }
+                        className="bg-black"
+                    >
+                        Go higher
+                    </button>
+                    {values.map((value) => {
+                        return (
+                            <Gauge
+                                key={value}
+                                value={parseInt(value)}
+                                size="large"
+                                showValue={true}
+                            />
+                        )
+                    })}
+                </div>
+
+                <Object />
             </div>
         </>
     )
