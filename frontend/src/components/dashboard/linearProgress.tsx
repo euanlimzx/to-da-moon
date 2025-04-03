@@ -4,7 +4,7 @@ import type { ProgressProps } from 'antd/es/progress'
 
 interface LinearProgressProps {
     percent: number
-    strokeWidth: number
+    strokeWidth?: number
     trailColor?: string
 }
 
@@ -23,6 +23,7 @@ const LinearProgress = ({
             <Progress
                 percent={percent}
                 percentPosition={{ align: 'end', type: 'inner' }}
+                format={() => null} // Removes the percentage text
                 size="default"
                 strokeWidth={strokeWidth}
                 strokeColor={twoColors}
