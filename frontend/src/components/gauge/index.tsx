@@ -1,18 +1,17 @@
-//can be swapped out for ant ui gauge
 export const Gauge = ({
     value,
     size = 'small',
     showValue = true,
-    color = 'white',
-    bgcolor = 'text-[#333]',
+    color = '#FFFFFF', // Default to white
+    bgcolor = '#333333', // Default background color
 }: {
     value: number
     size: 'small' | 'medium' | 'large'
     showValue: boolean
-    color?: string
-    bgcolor?: string
+    color?: string // Accepts a color hash code
+    bgcolor?: string // Accepts a background color hash code
 }) => {
-    const circumference = 332 //2 * Math.PI * 53; // 2 * pi * radius
+    const circumference = 332 // 2 * Math.PI * 53; // 2 * pi * radius
     const valueInCircumference = (value / 100) * circumference
     const strokeDasharray = `${circumference} ${circumference}`
     const initialOffset = circumference
@@ -47,24 +46,24 @@ export const Gauge = ({
                 strokeWidth="2"
                 className="-rotate-90 transform"
             >
+                {/* Background Circle */}
                 <circle
-                    className={`${bgcolor}`}
+                    stroke={bgcolor} // Use the background color hash
                     strokeWidth="12"
-                    stroke="currentColor"
                     fill="transparent"
                     shapeRendering="geometricPrecision"
                     r="53"
                     cx="60"
                     cy="60"
                 />
+                {/* Foreground Circle */}
                 <circle
-                    className={`animate-gauge_fill ${color}`}
+                    stroke={color} // Use the stroke color hash
                     strokeWidth="12"
                     strokeDasharray={strokeDasharray}
-                    strokeDashoffset={initialOffset}
+                    strokeDashoffset={strokeDashoffset}
                     shapeRendering="geometricPrecision"
                     strokeLinecap="round"
-                    stroke="currentColor"
                     fill="transparent"
                     r="53"
                     cx="60"
@@ -72,7 +71,7 @@ export const Gauge = ({
                     style={{
                         strokeDashoffset: strokeDashoffset,
                         transition:
-                            'stroke-dasharray 1s ease 0s,stroke 1s ease 0s',
+                            'stroke-dasharray 1s ease 0s, stroke 1s ease 0s',
                     }}
                 />
             </svg>
