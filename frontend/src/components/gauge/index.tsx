@@ -2,7 +2,7 @@ export const Gauge = ({
     value,
     size = 'small',
     showValue = true,
-    color = '#FFFFFF', // Default to white
+    color = '#507CFF', // Default to blue
     bgcolor = '#333333', // Default background color
 }: {
     value: number
@@ -24,9 +24,9 @@ export const Gauge = ({
             textSize: 'text-xs',
         },
         medium: {
-            width: '72',
-            height: '72',
-            textSize: 'text-lg',
+            width: '120',
+            height: '120',
+            textSize: 'text-xl',
         },
         large: {
             width: '144',
@@ -46,6 +46,14 @@ export const Gauge = ({
                 strokeWidth="2"
                 className="-rotate-90 transform"
             >
+                {/* Define the gradient */}
+                <defs>
+                    <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="80%" stopColor={color} /> {/* Start color */}
+                        <stop offset="100%" stopColor="#C0D7FA" /> {/* End color (white) */}
+                    </linearGradient>
+                </defs>
+
                 {/* Background Circle */}
                 <circle
                     stroke={bgcolor} // Use the background color hash
@@ -58,7 +66,7 @@ export const Gauge = ({
                 />
                 {/* Foreground Circle */}
                 <circle
-                    stroke={color} // Use the stroke color hash
+                    stroke="url(#gaugeGradient)" // Use the gradient as the stroke
                     strokeWidth="12"
                     strokeDasharray={strokeDasharray}
                     strokeDashoffset={strokeDashoffset}

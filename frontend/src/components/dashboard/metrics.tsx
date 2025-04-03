@@ -24,7 +24,7 @@ const MetricProgressBar: React.FC<MetricProgressBarProps> = ({
     unitType = "psi",
   }) => {
     return (
-      <div className="col w-full space-y-2"
+      <div className="col w-full gap-2"
             style={{ width: "15vw" }} // Set width to 10% of the viewport width
       >
         <p className="text-md">{unitType} Progress</p>
