@@ -5,6 +5,7 @@ import { socket } from '../socket'
 import Button from '@/components/button'
 import { Gauge } from '@/components/gauge'
 import Object from '@/components/rocket-object'
+import RotationVisualizer from '@/components/rotation-visualizer'
 
 export default function Home() {
     const [rocketHeight, setRocketHeight] = useState(0)
@@ -28,6 +29,7 @@ export default function Home() {
             <Background height={rocketHeight} />
             <div className="flex h-screen w-screen items-center justify-center">
                 <Dashboard />
+
                 <div className="absolute z-50 flex h-full w-full items-end">
                     {/* no error handling here yet, but increasing the button past the array index will cause it to go out of bounds 
             
@@ -53,6 +55,7 @@ export default function Home() {
                             />
                         )
                     })}
+                    <RotationVisualizer />
                 </div>
 
                 <Object />
