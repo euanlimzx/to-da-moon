@@ -15,8 +15,7 @@ import { liveLaunchHudConfig } from '@/utils'
 import { OverviewConfig } from '@/types/HudTypes'
 import { Gauge } from '@/components/gauge'
 
-//need a way to parse all the values from the csv file and create a mapping on backend
-//can then make an api call to get the mapping
+//need a way to parse all the values from the csv file and create a mapping
 
 export default function Page() {
     const [values, setValues] = useState<string[]>([])

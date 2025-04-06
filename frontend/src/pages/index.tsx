@@ -3,7 +3,6 @@ import Dashboard from '@/components/dashboard'
 import { useEffect, useState } from 'react'
 import { socket } from '../socket'
 import Object from '@/components/rocket-object'
-import RotationVisualizer from '@/components/rotation-visualizer'
 import axios from 'axios'
 import { backend } from '../socket'
 import { OverviewConfig } from '@/types/HudTypes'
@@ -42,7 +41,7 @@ export default function Home() {
         <>
             <Background height={rocketHeight} />
             <div className="flex h-screen w-screen items-center justify-center">
-                {config && <Dashboard config={config} HudConfigs={liveLaunchHudConfig}/>}
+                {config && <Dashboard OverviewConfig={config} HudConfigs={liveLaunchHudConfig}/>}
 
                 <div className="absolute flex h-full w-full items-end">
                     {/* no error handling here yet, but increasing the button past the array index will cause it to go out of bounds 
