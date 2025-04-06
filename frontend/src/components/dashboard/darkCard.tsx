@@ -19,7 +19,7 @@ export default function DarkCard({
 }: DarkCardProps) {
     return (
         <div
-            className={`z-10 inline-block rounded-lg bg-black bg-opacity-50 shadow-lg ${grow && 'h-full w-full'} ${lessPadding ? 'p-3' : 'p-5'} ${hideOverflow && 'overflow-hidden'}`}
+            className={`z-10 inline-block rounded-lg bg-black bg-opacity-50 shadow-lg ${grow ? 'h-full w-full' : ''} ${lessPadding ? 'p-3' : 'p-5'} ${hideOverflow ? 'overflow-hidden' : ''}`}
         >
             {(header || headerIcon) && (
                 <div className="mb-4 flex items-center text-white">
