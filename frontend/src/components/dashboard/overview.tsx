@@ -7,13 +7,20 @@ function infoIcon() {
     )
 }
 
-export default function Overview() {
+export interface Config {
+    name: string
+    currStage: number
+    numStages: number
+    isActive: boolean
+    isDelayed: boolean
+    estimatedLaunchTime: number
+}
+
+export default function Overview({ config }: { config: Config }) {
     return (
-        <DarkCard header="OVERVIEW" headerIcon={infoIcon()}>
-            <p className="font-bold">PROMETHEUS HOT FIRE</p>
-            <p>Lorem ipsum dolor sit amet consectetur</p>
-            <p>Lorem ipsum dolor sit amet consectetur</p>
-            <p>Lorem ipsum dolor sit amet consectetur</p>
+        <DarkCard header="Overview" headerIcon={infoIcon()}>
+            <p className="font-bold">{config.name}</p>
+            <p>{JSON.stringify(config)}</p>
         </DarkCard>
     )
 }

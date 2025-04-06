@@ -9,13 +9,14 @@ const LinearGraph = dynamic(
     () => import('@/components/dashboard/linearGraph'),
     { ssr: false }
 )
+import type { Config } from '@/components/dashboard/overview'
 import { Gauge } from '@/components/gauge'
 
 export default function Page() {
     const [values, setValues] = useState<string[]>([])
     const [error, setError] = useState<string | null>(null)
     const [data, setData] = useState<{ [key: string]: number }[]>([]) //this is a placeholder for testing, we eventually want to have multiple data streams
-
+    const [config, setConfig] = useState<null | Config>(null)
     const router = useRouter()
 
     // Fetching the data and setting the state
@@ -59,7 +60,6 @@ export default function Page() {
 
     return (
         <>
-            <Dashboard />
             <Button buttonFn={buttonFn} />
             <LinearGraph data={data} />
             {values.map((value) => {

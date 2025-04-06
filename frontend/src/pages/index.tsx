@@ -2,24 +2,35 @@ import Background from '@/components/background'
 import Dashboard from '@/components/dashboard'
 import { useEffect, useState } from 'react'
 import { socket } from '../socket'
-import Button from '@/components/button'
-import { Gauge } from '@/components/gauge'
 import Object from '@/components/rocket-object'
+import axios from 'axios'
+import { backend } from '../socket'
+import { Config } from '@/components/dashboard/overview'
 
 export default function Home() {
     const [rocketHeight, setRocketHeight] = useState(0)
     const [values, setValues] = useState([])
+    const [config, setConfig] = useState<null | Config>(null)
 
     useEffect(() => {
+        axios
+            .get(`${backend}/live/config`)
+            .then((response) => {
+                setConfig(response.data) // Assuming response.data is an object
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error)
+            })
         socket.on('live/broadcast-data-stream', (message) => {
             const val = Object.values(message)
             setValues(val)
-            console.log(message)
+        })
+        socket.on('live/config', (message) => {
+            setConfig(message)
         })
         return () => {
-            socket.on('live/broadcast-data-stream', (message) =>
-                console.log(message)
-            )
+            socket.off('live/broadcast-data-stream')
+            socket.off('live/update-config')
         }
     }, [])
 
@@ -27,8 +38,9 @@ export default function Home() {
         <>
             <Background height={rocketHeight} />
             <div className="flex h-screen w-screen items-center justify-center">
-                <Dashboard />
-                <div className="absolute flex h-full w-full items-end">
+                {config && <Dashboard config={config} />}
+
+                <div className="absolute z-50 flex h-full w-full items-end">
                     {/* no error handling here yet, but increasing the button past the array index will cause it to go out of bounds 
             
                         that should not be an issue with the final web app since we are changing the gradient based on altitue -- we will never go past the end of the array
@@ -43,18 +55,7 @@ export default function Home() {
                     >
                         Go higher
                     </button>
-                    {values.map((value) => {
-                        return (
-                            <Gauge
-                                key={value}
-                                value={parseInt(value)}
-                                size="large"
-                                showValue={true}
-                            />
-                        )
-                    })}
                 </div>
-
                 <Object />
             </div>
         </>
