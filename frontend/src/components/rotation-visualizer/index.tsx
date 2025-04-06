@@ -132,14 +132,26 @@ const RotationVisualizer = () => {
     console.log(orientation)
 
     return (
-        <DarkCard>
-            <div>
-                <button onClick={async () => await connect()}>Connect</button>
-                <button onClick={async () => await disconnect()}>
-                    Disconnect
-                </button>
+        <DarkCard lessPadding grow hideOverflow>
+            <h2 className="my-2 text-center text-xl font-semibold">
+                ORIENTATION
+            </h2>
+            {/* <button
+                onClick={async () => await connect()}
+                style={{ zIndex: 100 }}
+            >
+                Connect
+            </button>
+            <button
+                onClick={async () => await disconnect()}
+                style={{ zIndex: 100 }}
+            >
+                Disconnect
+            </button> */}
+
+            <div className="flex h-full w-full items-center justify-center">
+                <RocketObject orientation={orientation} />
             </div>
-            <RocketObject orientation={orientation} />
         </DarkCard>
     )
 }

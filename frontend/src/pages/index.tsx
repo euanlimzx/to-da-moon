@@ -30,7 +30,7 @@ export default function Home() {
             <div className="flex h-screen w-screen items-center justify-center">
                 <Dashboard />
 
-                <div className="absolute z-50 flex h-full w-full items-end">
+                <div className="absolute flex h-full w-full items-end">
                     {/* no error handling here yet, but increasing the button past the array index will cause it to go out of bounds 
             
                         that should not be an issue with the final web app since we are changing the gradient based on altitue -- we will never go past the end of the array
@@ -55,7 +55,6 @@ export default function Home() {
                             />
                         )
                     })}
-                    <RotationVisualizer />
                 </div>
 
                 <Object />

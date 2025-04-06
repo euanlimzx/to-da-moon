@@ -7,7 +7,7 @@ function CameraSetup() {
 
     useEffect(() => {
         // Position camera at a fixed distance
-        camera.position.set(20, 20, 0)
+        camera.position.set(15, 15, 0)
         // Rotate camera 45 degrees around Y axis
         camera.position.applyAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI / 4)
         // Make camera look at center
@@ -20,7 +20,7 @@ function CameraSetup() {
 // Main App component
 function RocketObject({ orientation }) {
     return (
-        <div className="h-72 w-72">
+        <div className="sheesh h-full w-full">
             {/* 
             
             x - red 
@@ -34,6 +34,7 @@ function RocketObject({ orientation }) {
                     gl.shadowMap.enabled = true
                     gl.setClearColor(0x000000, 0) // Set clear color with 0 opacity
                 }}
+                style={{ height: '100%', width: '100%' }}
             >
                 <CameraSetup />
                 <Scene orientation={orientation} />
