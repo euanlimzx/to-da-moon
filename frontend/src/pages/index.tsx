@@ -6,11 +6,14 @@ import Object from '@/components/rocket-object'
 import axios from 'axios'
 import { backend } from '../socket'
 import { Config } from '@/components/dashboard/overview'
+import { liveLaunchHudConfig } from '@/utils'
+
 
 export default function Home() {
     const [rocketHeight, setRocketHeight] = useState(0)
     const [values, setValues] = useState([])
     const [config, setConfig] = useState<null | Config>(null)
+
 
     useEffect(() => {
         axios
@@ -38,7 +41,7 @@ export default function Home() {
         <>
             <Background height={rocketHeight} />
             <div className="flex h-screen w-screen items-center justify-center">
-                {config && <Dashboard config={config} />}
+                {config && <Dashboard config={config} HudConfigs={liveLaunchHudConfig}/>}
 
                 <div className="absolute flex h-full w-full items-end">
                     {/* no error handling here yet, but increasing the button past the array index will cause it to go out of bounds 
