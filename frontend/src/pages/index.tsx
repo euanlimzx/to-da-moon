@@ -6,14 +6,14 @@ import Object from '@/components/rocket-object'
 import RotationVisualizer from '@/components/rotation-visualizer'
 import axios from 'axios'
 import { backend } from '../socket'
-import { Config } from '@/components/dashboard/overview'
+import { OverviewConfig } from '@/types/HudTypes'
 import { liveLaunchHudConfig } from '@/utils'
 
 
 export default function Home() {
     const [rocketHeight, setRocketHeight] = useState(0)
     const [values, setValues] = useState([])
-    const [config, setConfig] = useState<null | Config>(null)
+    const [config, setConfig] = useState<null | OverviewConfig>(null)
 
 
     useEffect(() => {

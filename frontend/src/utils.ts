@@ -8,6 +8,10 @@ export function calculatePixelHeight(normalizedValue: number) {
 
 import { HudConfig } from './types/HudTypes';
 
+// Deciding if its better to have a const or dynamically read from csv and display everything
+// Autonomy for user is probably better: 
+// user can choose what to display through the launch config should directly be effected
+
 //display types : [gauge, linear, graph]
 //intialize value equal to min
 export const liveLaunchHudConfig: HudConfig[] = [

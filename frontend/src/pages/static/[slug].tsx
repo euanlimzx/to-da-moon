@@ -9,27 +9,42 @@ const LinearGraph = dynamic(
     () => import('@/components/dashboard/linearGraph'),
     { ssr: false }
 )
-import type { Config } from '@/components/dashboard/overview'
+import axios from 'axios'
+import { backend } from '../../socket'
+import { liveLaunchHudConfig } from '@/utils'
+import { OverviewConfig } from '@/types/HudTypes'
 import { Gauge } from '@/components/gauge'
+
+//need a way to parse all the values from the csv file and create a mapping
 
 export default function Page() {
     const [values, setValues] = useState<string[]>([])
     const [error, setError] = useState<string | null>(null)
     const [data, setData] = useState<{ [key: string]: number }[]>([]) //this is a placeholder for testing, we eventually want to have multiple data streams
-    const [config, setConfig] = useState<null | Config>(null)
+    const [config, setConfig] = useState<null | OverviewConfig>(null)
     const router = useRouter()
 
-    // Fetching the data and setting the state
+    
     useEffect(() => {
+
+        axios
+            .get(`${backend}/live/config`)
+            .then((response) => {
+                setConfig(response.data) // Assuming response.data is an object
+            })
+            .catch((error) => {
+                console.error('Error fetching data:', error)
+            })
+        
         // Set up the socket listener to receive the data stream
         socket.on('static/receive-data-stream', (message: string[]) => {
             setValues(message) // Update state with the latest values
+            console.log(message)
             setData((prevData) => {
                 const newData = [
                     ...prevData,
                     { 'Fuel-Tank': parseInt(message[1]) }, //todo @euan we should probably have a const files for column values
                 ]
-                console.log(newData)
                 if (newData.length > 30) {
                     newData.shift()
                 }
@@ -62,6 +77,7 @@ export default function Page() {
         <>
             <Button buttonFn={buttonFn} />
             <LinearGraph data={data} />
+            {config && <Dashboard config={config} HudConfigs={liveLaunchHudConfig}/>}
             {values.map((value) => {
                 return (
                     <Gauge

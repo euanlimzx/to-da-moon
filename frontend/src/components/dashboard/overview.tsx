@@ -1,22 +1,14 @@
 import DarkCard from './darkCard'
 import { TableOfContents } from 'lucide-react'
-
+import { OverviewConfig } from '@/types/HudTypes'
 function infoIcon() {
     return (
         <TableOfContents />
     )
 }
 
-export interface Config {
-    name: string
-    currStage: number
-    numStages: number
-    isActive: boolean
-    isDelayed: boolean
-    estimatedLaunchTime: number
-}
 
-export default function Overview({ config }: { config: Config }) {
+export default function Overview({ config }: { config: OverviewConfig }) {
     return (
         <DarkCard header="Overview" headerIcon={infoIcon()}>
             <p className="font-bold">{config.name}</p>

@@ -13,3 +13,13 @@ export enum displayTypes{
     linear = "linear", 
     graph = "graph", 
 }
+
+
+export interface OverviewConfig {
+    name: string
+    currStage: number
+    numStages: number
+    isActive: boolean
+    isDelayed: boolean
+    estimatedLaunchTime: number
+}
