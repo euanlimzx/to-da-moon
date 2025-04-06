@@ -3,6 +3,7 @@ import Dashboard from '@/components/dashboard'
 import { useEffect, useState } from 'react'
 import { socket } from '../socket'
 import Object from '@/components/rocket-object'
+import RotationVisualizer from '@/components/rotation-visualizer'
 import axios from 'axios'
 import { backend } from '../socket'
 import { Config } from '@/components/dashboard/overview'
@@ -38,6 +39,7 @@ export default function Home() {
         <>
             <Background height={rocketHeight} />
             <div className="flex h-screen w-screen items-center justify-center">
+
                 {config && <Dashboard config={config} />}
 
                 <div className="absolute flex h-full w-full items-end">
