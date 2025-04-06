@@ -1,18 +1,17 @@
-//can be swapped out for ant ui gauge
 export const Gauge = ({
     value,
     size = 'small',
     showValue = true,
-    color = 'white',
-    bgcolor = 'text-[#333]',
+    color = '#507CFF', // Default to blue
+    bgcolor = '#333333', // Default background color
 }: {
     value: number
     size: 'small' | 'medium' | 'large'
     showValue: boolean
-    color?: string
-    bgcolor?: string
+    color?: string // Accepts a color hash code
+    bgcolor?: string // Accepts a background color hash code
 }) => {
-    const circumference = 332 //2 * Math.PI * 53; // 2 * pi * radius
+    const circumference = 332 // 2 * Math.PI * 53; // 2 * pi * radius
     const valueInCircumference = (value / 100) * circumference
     const strokeDasharray = `${circumference} ${circumference}`
     const initialOffset = circumference
@@ -25,9 +24,9 @@ export const Gauge = ({
             textSize: 'text-xs',
         },
         medium: {
-            width: '72',
-            height: '72',
-            textSize: 'text-lg',
+            width: '120',
+            height: '120',
+            textSize: 'text-xl',
         },
         large: {
             width: '144',
@@ -47,24 +46,32 @@ export const Gauge = ({
                 strokeWidth="2"
                 className="-rotate-90 transform"
             >
+                {/* Define the gradient */}
+                <defs>
+                    <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="80%" stopColor={color} /> {/* Start color */}
+                        <stop offset="100%" stopColor="#C0D7FA" /> {/* End color (white) */}
+                    </linearGradient>
+                </defs>
+
+                {/* Background Circle */}
                 <circle
-                    className={`${bgcolor}`}
+                    stroke={bgcolor} // Use the background color hash
                     strokeWidth="12"
-                    stroke="currentColor"
                     fill="transparent"
                     shapeRendering="geometricPrecision"
                     r="53"
                     cx="60"
                     cy="60"
                 />
+                {/* Foreground Circle */}
                 <circle
-                    className={`animate-gauge_fill ${color}`}
+                    stroke="url(#gaugeGradient)" // Use the gradient as the stroke
                     strokeWidth="12"
                     strokeDasharray={strokeDasharray}
-                    strokeDashoffset={initialOffset}
+                    strokeDashoffset={strokeDashoffset}
                     shapeRendering="geometricPrecision"
                     strokeLinecap="round"
-                    stroke="currentColor"
                     fill="transparent"
                     r="53"
                     cx="60"
@@ -72,7 +79,7 @@ export const Gauge = ({
                     style={{
                         strokeDashoffset: strokeDashoffset,
                         transition:
-                            'stroke-dasharray 1s ease 0s,stroke 1s ease 0s',
+                            'stroke-dasharray 1s ease 0s, stroke 1s ease 0s',
                     }}
                 />
             </svg>
