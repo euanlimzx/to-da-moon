@@ -133,9 +133,7 @@ const RotationVisualizer = () => {
 
     return (
         <DarkCard lessPadding grow hideOverflow>
-            <h2 className="my-2 text-center text-xl font-semibold">
-                ORIENTATION
-            </h2>
+            <h2 className="text-center text-xl font-semibold">Orientation</h2>
             {/* <button
                 onClick={async () => await connect()}
                 style={{ zIndex: 100 }}

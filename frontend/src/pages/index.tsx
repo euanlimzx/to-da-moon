@@ -8,22 +8,21 @@ import { backend } from '../socket'
 import { OverviewConfig } from '@/types/HudTypes'
 import { liveLaunchHudConfig } from '@/hudConfig'
 
-
 export default function Home() {
     const [rocketHeight, setRocketHeight] = useState(0)
     const [values, setValues] = useState([])
     const [config, setConfig] = useState<null | OverviewConfig>(null)
 
-
     useEffect(() => {
-        axios
-            .get(`${backend}/live/config`)
-            .then((response) => {
-                setConfig(response.data) // Assuming response.data is an object
-            })
-            .catch((error) => {
-                console.error('Error fetching data:', error)
-            })
+        // axios
+        //     .get(`${backend}/live/config`)
+        //     .then((response) => {
+        //         setConfig(response.data) // Assuming response.data is an object
+        //     })
+        //     .catch((error) => {
+        //         console.error('Error fetching data:', error)
+        //     })
+        setConfig(true)
         socket.on('live/broadcast-data-stream', (message) => {
             const val = Object.values(message)
             setValues(val)
