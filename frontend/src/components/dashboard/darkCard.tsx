@@ -36,7 +36,7 @@ export default function DarkCard({
 }: DarkCardProps) {
   return (
     <div
-      className={`z-10 inline-block h-full w-full bg-black bg-opacity-50 shadow-lg ${paddingClasses[padding]} ${hideOverflow ? 'overflow-hidden' : ''} ${removeCornerRounding ? '' : 'rounded-lg'} ${reduceBottomPadding ? 'pb-0.5' : ''}`}
+      className={`z-10 inline-block h-full w-full bg-black bg-opacity-50 shadow-lg ${paddingClasses[padding]} ${hideOverflow ? 'overflow-hidden' : ''} ${removeCornerRounding ? 'rounded-t-lg' : 'rounded-lg'} ${reduceBottomPadding ? 'pb-0.5' : ''}`}
     >
       {(header || headerIcon) && (
         <div className="mb-4 flex items-center text-white">

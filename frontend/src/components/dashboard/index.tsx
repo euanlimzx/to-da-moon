@@ -27,20 +27,24 @@ export default function Dashboard({
 
       {/* TODO @Shawn: make these take up less space on a mid sized screen */}
       {isPhonePortrait ? (
-        <div className="absolute bottom-0 left-0 right-0 max-h-[55vh] w-full overflow-y-auto">
+        <div className="absolute bottom-0 left-0 right-0 h-[55vh] w-full">
           <DarkCard removeCornerRounding reduceBottomPadding>
-            <div className="flex flex-col gap-4">
-              <div>
-                <Overview config={OverviewConfig} />
-              </div>
-              <div>
-                <Metrics
-                  HudConfigs={HudConfigs}
-                  OverviewConfig={OverviewConfig}
-                />
-              </div>
-              <div>
-                <RotationVisualizer isPhonePortrait={isPhonePortrait} />
+            <div className="flex h-full flex-col">
+              <div className="scroll no-scrollbar overflow-y-auto">
+                <div className="flex flex-col gap-4">
+                  <div>
+                    <Overview config={OverviewConfig} />
+                  </div>
+                  <div>
+                    <Metrics
+                      HudConfigs={HudConfigs}
+                      OverviewConfig={OverviewConfig}
+                    />
+                  </div>
+                  <div>
+                    <RotationVisualizer isPhonePortrait={isPhonePortrait} />
+                  </div>
+                </div>
               </div>
             </div>
           </DarkCard>
@@ -52,7 +56,7 @@ export default function Dashboard({
               <Overview config={OverviewConfig} />
             </div>
             <div className="lg:w-1/4 h-64 w-1/2">
-              <RotationVisualizer isPhonePortrait={isPhonePortrait} />
+              <RotationVisualizer />
             </div>
           </div>
           <div className="lg:w-1/4 w-1/2">
