@@ -7,7 +7,8 @@ import {
     Line,
 } from 'recharts'
 
-function Chart({ data }: { data: { [key: string]: number }[] }) {
+function Chart({ data, dataName }: { data: { [key: string]: number }[], dataName: string }) {
+    console.log(data)
     return (
         <div>
             <LineChart
@@ -39,7 +40,7 @@ function Chart({ data }: { data: { [key: string]: number }[] }) {
                 <Line
                     dot={false}
                     type="monotone"
-                    dataKey="Fuel-Tank"
+                    dataKey={dataName}
                     stroke="url(#gradient)" // Reference the gradient
                     strokeWidth={3}
                 />

@@ -1,55 +1,88 @@
 import React from 'react';
-import { useState } from 'react';
 import LinearProgress from "./linearProgress";
-import type { MenuProps } from "antd";
-import { DownOutlined } from '@ant-design/icons';
-import { Dropdown, Space } from "antd";
+import { useState, useEffect, useRef } from 'react';
+import { DownOutlined, UpOutlined } from '@ant-design/icons'; // Added UpOutlined
+import { HudConfig } from '@/types/HudTypes';
+import { OverviewConfig } from '@/types/HudTypes';
+import { Gauge } from '@/components/gauge';
+import Chart from '@/components/dashboard/linearGraph';
 
 interface MetricProgressBarProps {
-  value: number;
-  unitType?: string;
+  metricConfig : HudConfig; 
+  OverviewConfig: OverviewConfig;
 }
 
-const MetricProgressBar = ({ value, unitType = "Pressure" }: MetricProgressBarProps) => {
-  const dropdownMenuUnits = ["psi", "degrees", "miles"];
+const MetricProgressBar = ({ metricConfig, OverviewConfig }: MetricProgressBarProps) => {
+  const [openSecondDisplay, setOpenSecondDisplay] = useState(false);
+  const [metricHistory, setMetricHistory] = useState<{ [key: string]: number }[]>([]);
+  const latestValueRef = useRef(metricConfig.value);
   
-  // State to track the selected unit - initialize with first option or props value if provided
-  const [unit, setUnit] = useState(unitType === "Pressure" ? "psi" : dropdownMenuUnits[0]);
+  // Update latest value reference without rerendering
+  useEffect(() => {
+    latestValueRef.current = metricConfig.value;
+  }, [metricConfig.value]);
+  
+  // Sample at regular intervals (e.g., every 500ms)
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setMetricHistory(prev => {
+        const newPoint = { [metricConfig.dataName]: latestValueRef.current };
+        const newHistory = [...prev, newPoint];
+        return newHistory.slice(-30);
+      });
+    }, 500); // Update every 500ms
+    
+    return () => clearInterval(intervalId); // Cleanup on unmount
+  }, [metricConfig.dataName]);
 
-  // Handle menu item click - simplified to directly use the unit value
-  const handleMenuClick: MenuProps["onClick"] = (e) => {
-    setUnit(e.key); // Update the unit state with the selected key
-  };
-
-  // Define dropdown menu items
-  const items: MenuProps["items"] = dropdownMenuUnits.map((unitOption) => ({
-    key: unitOption,
-    label: unitOption, 
-  }));
+  const handleDisplaySwitch = () => {
+    setOpenSecondDisplay(!openSecondDisplay);
+  }
 
   return (
-    <div className="col w-full gap-2" style={{ width: "15vw" }}>
-      <p className="text-md">{unitType} Progress</p>
+    <div className="col w-full gap-2 mb-4">
+      <p className="text-md font-medium">{metricConfig.dataName}</p>
       <div className="flex items-center space-x-2">
-        <LinearProgress percent={value} strokeWidth={10} />
-        <p className="text-sm">
-          {value} {unit}
-        </p>
-        <Dropdown 
-          menu={{ 
-            items, 
-            onClick: handleMenuClick 
-          }} 
-          trigger={['click']}
-          className="cursor-pointer"
-        >
-          <a onClick={(e) => e.preventDefault()}>
-            <Space>
-              {unit}
-              <DownOutlined />
-            </Space>
-          </a>
-        </Dropdown>
+        <LinearProgress percent={metricConfig.value} strokeWidth={10} OverviewConfig={OverviewConfig}/>
+        <label className="text-sm">
+          {metricConfig.value} 
+        </label>
+        <label className="text-sm">
+          {metricConfig.units}
+        </label>
+        
+        {/* Animated arrow that changes direction */}
+        <div className="cursor-pointer" onClick={handleDisplaySwitch}>
+          {openSecondDisplay ? (
+            <UpOutlined className="transition-transform duration-300" />
+          ) : (
+            <DownOutlined className="transition-transform duration-300" />
+          )}
+        </div>
+      </div>
+
+      {/* Animated container for secondary display */}
+      <div 
+        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+          openSecondDisplay ? 'max-h-96 opacity-100 mt-3' : 'max-h-0 opacity-0 mt-0'
+        }`}
+      >
+        <div className="flex items-center justify-center">
+          {metricConfig.secondDisplayType === 'gauge' && (
+            <Gauge 
+              value={metricConfig.value} 
+              size={'medium'} 
+              showValue={true} 
+              color={'#507CFF'}
+            />
+          )}
+          
+          {metricConfig.secondDisplayType === 'graph' && (
+            <div className="w-full">
+              <Chart data={metricHistory} dataName={metricConfig.dataName}/>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
