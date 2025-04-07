@@ -1,11 +1,11 @@
 import React from 'react';
-import { useState } from 'react';
 import LinearProgress from "./linearProgress";
-import type { MenuProps } from "antd";
+import { useState, useEffect, useRef } from 'react';
 import { DownOutlined } from '@ant-design/icons';
-import { Dropdown, Space } from "antd";
 import { HudConfig } from '@/types/HudTypes';
 import { OverviewConfig } from '@/types/HudTypes';
+import { Gauge } from '@/components/gauge';
+import Chart from '@/components/dashboard/linearGraph';
 
 interface MetricProgressBarProps {
   metricConfig : HudConfig; 
@@ -13,45 +13,60 @@ interface MetricProgressBarProps {
 }
 
 const MetricProgressBar = ({ metricConfig, OverviewConfig }: MetricProgressBarProps) => {
-  const dropdownMenuUnits = ["psi", "degrees", "miles"];
+  const [openSecondDisplay, setOpenSecondDisplay] = useState(false);
+
+  const [metricHistory, setMetricHistory] = useState<{ [key: string]: number }[]>([]);
+  const latestValueRef = useRef(metricConfig.value);
   
-  // State to track the selected unit - initialize with first option or props value if provided
-  const [unit, setUnit] = useState(metricConfig.units === "Pressure" ? "psi" : dropdownMenuUnits[0]);
+  // Update latest value reference without rerendering
+  useEffect(() => {
+    latestValueRef.current = metricConfig.value;
+  }, [metricConfig.value]);
+  
+  // Sample at regular intervals (e.g., every 500ms)
+  useEffect(() => {
+    setMetricHistory(prev => {
+      const newPoint = { [metricConfig.dataName]: latestValueRef.current };
+      const newHistory = [...prev, newPoint];
+      return newHistory.slice(-30);
+    });
+  }, [metricConfig.dataName])
 
-  // Handle menu item click - simplified to directly use the unit value
-  const handleMenuClick: MenuProps["onClick"] = (e) => {
-    setUnit(e.key); // Update the unit state with the selected key
-  };
-
-  // Define dropdown menu items
-  const items: MenuProps["items"] = dropdownMenuUnits.map((unitOption) => ({
-    key: unitOption,
-    label: unitOption, 
-  }));
+  const handleDisplaySwitch = () => {
+    setOpenSecondDisplay(!openSecondDisplay);
+  }
 
   return (
     <div className="col w-full gap-2" style={{ width: "15vw" }}>
       <p className="text-md">{metricConfig.dataName}</p>
       <div className="flex items-center space-x-2">
         <LinearProgress percent={metricConfig.value} strokeWidth={10} OverviewConfig={OverviewConfig}/>
-        <p className="text-sm">
-          {metricConfig.value} {metricConfig.units}
-        </p>
-        <Dropdown 
-          menu={{ 
-            items, 
-            onClick: handleMenuClick 
-          }} 
-          trigger={['click']}
-          className="cursor-pointer"
-        >
-          <a onClick={(e) => e.preventDefault()}>
-            <Space>
-              <DownOutlined />
-            </Space>
-          </a>
-        </Dropdown>
+        <label className="text-sm">
+          {metricConfig.value} 
+        </label>
+        <label className="text-sm">
+          {metricConfig.units}
+        </label>
+        <DownOutlined className="cursor-pointer" onClick={()=>handleDisplaySwitch()}/>
       </div>
+      {openSecondDisplay && (
+        <div className="flex items-center justify-center mt-2">
+          {metricConfig.secondDisplayType === 'gauge' && (
+            <Gauge 
+              value={metricConfig.value} 
+              size={'medium'} 
+              showValue={true} 
+              color={'#507CFF'}
+            />
+          )}
+          
+          {metricConfig.secondDisplayType === 'graph' && (
+            <div className="w-full">
+              <Chart data={metricHistory} dataName={metricConfig.dataName}/>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

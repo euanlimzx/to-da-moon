@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { socket } from '../../socket'
 import Dashboard from '@/components/dashboard'
 import Button from '@/components/button'
-import LinearProgress from '@/components/dashboard/linearProgress'
 const LinearGraph = dynamic(
     () => import('@/components/dashboard/linearGraph'),
     { ssr: false }
@@ -94,7 +93,7 @@ export default function Page() {
     return (
         <>
             <Button buttonFn={buttonFn} />
-            <LinearGraph data={data} />
+            <LinearGraph data={data} dataName={"Fuel-Tank"}/>
             {Overviewconfig && <Dashboard OverviewConfig={Overviewconfig} HudConfigs={HudConfigs}/>}
             {values.map((value) => {
                 return (
