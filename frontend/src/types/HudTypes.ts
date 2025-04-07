@@ -1,5 +1,6 @@
 export type HudConfig = {
     dataName: string; 
+    dataCol: number; 
     min: number; 
     max: number;
     value: number; 

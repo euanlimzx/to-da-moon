@@ -6,7 +6,7 @@ import Object from '@/components/rocket-object'
 import axios from 'axios'
 import { backend } from '../socket'
 import { OverviewConfig } from '@/types/HudTypes'
-import { liveLaunchHudConfig } from '@/utils'
+import { liveLaunchHudConfig } from '@/hudConfig'
 
 
 export default function Home() {

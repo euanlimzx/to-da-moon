@@ -11,7 +11,7 @@ const LinearGraph = dynamic(
 )
 import axios from 'axios'
 import { backend } from '../../socket'
-import { liveLaunchHudConfig } from '@/utils'
+import { liveLaunchHudConfig } from '@/hudConfig'
 import { OverviewConfig } from '@/types/HudTypes'
 import { Gauge } from '@/components/gauge'
 

@@ -1,10 +1,8 @@
-import { useState } from "react";
 import DarkCard from "./darkCard";
 import { ChartLine } from "lucide-react";
-import LinearProgress from "./linearProgress";
-import { Gauge } from "../gauge";
 import React from 'react'
 import MetricProgressBar from "./metricProgressBar";
+import { HudConfig, OverviewConfig } from "@/types/HudTypes";
 
 
 
@@ -20,17 +18,34 @@ can provide context to the metricsProgressBar
 want to make it easy to take in props to change percent of progress Bars
 */
 interface MetricsProps {
-    pressure1: number
-    pressure2: number
-    pressure3: number
-    gaugePressure : number
+  HudConfigs: HudConfig[]
+  OverviewConfig: OverviewConfig
 }
 
 
-const Metrics = ({pressure1, pressure2, pressure3, gaugePressure} : MetricsProps) => {
- 
-    
+/*
+<MetricProgressBar
+  value={pressure1}
+  unitType="psi"
+/>
+<MetricProgressBar
+    value={pressure2}
+    unitType="degrees"
+/>
+<MetricProgressBar
+    value={pressure3}
+    unitType="miles"
+/>
+<Gauge 
+    value={gaugePressure}
+    size={'medium'}
+    showValue={true}
+    color={'#507CFF'}
+/>
+*/
 
+
+const Metrics = ({HudConfigs, OverviewConfig}: MetricsProps) => {
   function graphIcon() {
     return (
         <ChartLine/>
@@ -39,24 +54,16 @@ const Metrics = ({pressure1, pressure2, pressure3, gaugePressure} : MetricsProps
   return (
     <div className="">
         <DarkCard header="SENSORS" headerIcon={graphIcon()}>
-            <MetricProgressBar
-                value={pressure1}
-                unitType="psi"
-            />
-            <MetricProgressBar
-                value={pressure2}
-                unitType="degrees"
-            />
-            <MetricProgressBar
-                value={pressure3}
-                unitType="miles"
-            />
-            <Gauge 
-                value={gaugePressure}
-                size={'medium'}
-                showValue={true}
-                color={'#507CFF'}
-            />
+        <div className="space-y-4">
+                {HudConfigs?.map((config, index) => (
+                    <div key={`${index}`}>
+                        <MetricProgressBar 
+                            metricConfig={config}
+                            OverviewConfig={OverviewConfig}
+                        /> 
+                    </div>
+                ))}
+            </div>
         </DarkCard>
     </div>
   )

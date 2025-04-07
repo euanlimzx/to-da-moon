@@ -11,17 +11,17 @@ const LinearGraph = dynamic(
 )
 import axios from 'axios'
 import { backend } from '../../socket'
-import { liveLaunchHudConfig } from '@/utils'
-import { OverviewConfig } from '@/types/HudTypes'
+import { liveLaunchHudConfig } from '@/hudConfig'
+import { OverviewConfig, HudConfig } from '@/types/HudTypes'
 import { Gauge } from '@/components/gauge'
 
 //need a way to parse all the values from the csv file and create a mapping
-
 export default function Page() {
     const [values, setValues] = useState<string[]>([])
     const [error, setError] = useState<string | null>(null)
     const [data, setData] = useState<{ [key: string]: number }[]>([]) //this is a placeholder for testing, we eventually want to have multiple data streams
-    const [config, setConfig] = useState<null | OverviewConfig>(null)
+    const [Overviewconfig, setViewConfig] = useState<null | OverviewConfig>(null)
+    const [HudConfigs, setHudConfigs] = useState<HudConfig[]>(liveLaunchHudConfig)
     const router = useRouter()
 
     
@@ -30,7 +30,7 @@ export default function Page() {
         axios
             .get(`${backend}/live/config`)
             .then((response) => {
-                setConfig(response.data) // Assuming response.data is an object
+                setViewConfig(response.data) // Assuming response.data is an object
             })
             .catch((error) => {
                 console.error('Error fetching data:', error)
@@ -40,6 +40,24 @@ export default function Page() {
         socket.on('static/receive-data-stream', (message: string[]) => {
             setValues(message) // Update state with the latest values
             console.log(message)
+
+            // Update HUD configs with new values
+            setHudConfigs(prevConfigs => {
+                const updatedConfigs = prevConfigs.map(config => {
+                    const columnIndex = config.dataCol;
+                    if (message[columnIndex] !== undefined) {
+                        const parsedValue = parseInt(message[columnIndex]);
+                        const newValue = isNaN(parsedValue) ? 0 : parsedValue;
+                        return { 
+                            ...config, 
+                            value: newValue
+                        };
+                    }
+                    return config;
+                });
+                return updatedConfigs;
+            });
+            
             setData((prevData) => {
                 const newData = [
                     ...prevData,
@@ -77,7 +95,7 @@ export default function Page() {
         <>
             <Button buttonFn={buttonFn} />
             <LinearGraph data={data} />
-            {config && <Dashboard OverviewConfig={config} HudConfigs={liveLaunchHudConfig}/>}
+            {Overviewconfig && <Dashboard OverviewConfig={Overviewconfig} HudConfigs={HudConfigs}/>}
             {values.map((value) => {
                 return (
                     <Gauge

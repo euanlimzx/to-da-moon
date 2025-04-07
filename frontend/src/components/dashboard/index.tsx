@@ -18,9 +18,7 @@ export default function Dashboard({ OverviewConfig, HudConfigs }: DashboardProps
     return (
         <div className="absolute z-50 h-screen w-screen p-10">
             <Timeline
-                numStages={OverviewConfig.numStages}
-                currStage={OverviewConfig.currStage}
-                isActive={OverviewConfig.isActive}
+                OverviewConfig={OverviewConfig}
             />
             <div className="flex flex-col gap-4">
                 {/* TODO @Shawn: make these take up less space on a mid sized screen */}
@@ -28,7 +26,7 @@ export default function Dashboard({ OverviewConfig, HudConfigs }: DashboardProps
                     <div className="w-1/4">
                         <Overview config={OverviewConfig}/>
                     </div>
-                    <Metrics pressure1={40} pressure2={30} pressure3={100} gaugePressure={50} />
+                    <Metrics HudConfigs={HudConfigs} OverviewConfig={OverviewConfig}/>
                </div>
                
                 <div className="h-64 w-1/4">

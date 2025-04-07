@@ -4,17 +4,19 @@ import LinearProgress from "./linearProgress";
 import type { MenuProps } from "antd";
 import { DownOutlined } from '@ant-design/icons';
 import { Dropdown, Space } from "antd";
+import { HudConfig } from '@/types/HudTypes';
+import { OverviewConfig } from '@/types/HudTypes';
 
 interface MetricProgressBarProps {
-  value: number;
-  unitType?: string;
+  metricConfig : HudConfig; 
+  OverviewConfig: OverviewConfig;
 }
 
-const MetricProgressBar = ({ value, unitType = "Pressure" }: MetricProgressBarProps) => {
+const MetricProgressBar = ({ metricConfig, OverviewConfig }: MetricProgressBarProps) => {
   const dropdownMenuUnits = ["psi", "degrees", "miles"];
   
   // State to track the selected unit - initialize with first option or props value if provided
-  const [unit, setUnit] = useState(unitType === "Pressure" ? "psi" : dropdownMenuUnits[0]);
+  const [unit, setUnit] = useState(metricConfig.units === "Pressure" ? "psi" : dropdownMenuUnits[0]);
 
   // Handle menu item click - simplified to directly use the unit value
   const handleMenuClick: MenuProps["onClick"] = (e) => {
@@ -29,11 +31,11 @@ const MetricProgressBar = ({ value, unitType = "Pressure" }: MetricProgressBarPr
 
   return (
     <div className="col w-full gap-2" style={{ width: "15vw" }}>
-      <p className="text-md">{unitType} Progress</p>
+      <p className="text-md">{metricConfig.dataName}</p>
       <div className="flex items-center space-x-2">
-        <LinearProgress percent={value} strokeWidth={10} />
+        <LinearProgress percent={metricConfig.value} strokeWidth={10} OverviewConfig={OverviewConfig}/>
         <p className="text-sm">
-          {value} {unit}
+          {metricConfig.value} {metricConfig.units}
         </p>
         <Dropdown 
           menu={{ 
@@ -45,7 +47,6 @@ const MetricProgressBar = ({ value, unitType = "Pressure" }: MetricProgressBarPr
         >
           <a onClick={(e) => e.preventDefault()}>
             <Space>
-              {unit}
               <DownOutlined />
             </Space>
           </a>
