@@ -13,6 +13,7 @@ const THRUSTER_ORANGE = '#ff9a40'
 
 const Rocket = ({ isPhonePortrait, drawerOpen }) => {
   const rocketRef = useRef<THREE.Group>(null)
+  const hasLaunched = useRef(false)
 
   // Animation loop
   useFrame(() => {
@@ -24,10 +25,12 @@ const Rocket = ({ isPhonePortrait, drawerOpen }) => {
       rocketRef.current.position.y < 50
     ) {
       rocketRef.current.position.y += 1
-      rocketRef.current.position.x = Math.random() * Math.PI * 0.5
-      rocketRef.current.rotation.x = Math.random() * Math.sin(1) * 0.04
-      rocketRef.current.rotation.z = Math.random() * Math.sin(1) * 0.04
-      rocketRef.current.position.z = Math.random() * Math.PI * 0.5
+      if (!hasLaunched.current) {
+        rocketRef.current.position.x = Math.random() * Math.PI * 0.5
+        rocketRef.current.rotation.x = Math.random() * Math.sin(1) * 0.04
+        rocketRef.current.rotation.z = Math.random() * Math.sin(1) * 0.04
+        rocketRef.current.position.z = Math.random() * Math.PI * 0.5
+      }
     } else if (
       isPhonePortrait &&
       !drawerOpen &&
@@ -38,6 +41,7 @@ const Rocket = ({ isPhonePortrait, drawerOpen }) => {
 
     // subsequent rotation of the rocket as it is in stable flight mode
     else {
+      hasLaunched.current = true
       rocketRef.current.rotation.y += Math.sin(1) * 0.02
     }
 
