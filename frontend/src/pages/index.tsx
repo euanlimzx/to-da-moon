@@ -14,6 +14,7 @@ export default function Home() {
   const [rocketHeight, setRocketHeight] = useState(0)
   const [values, setValues] = useState([])
   const [config, setConfig] = useState<null | OverviewConfig>(null)
+  const [drawerOpen, setDrawerOpen] = useState(true)
 
   const [isPhonePortrait, setIsPhonePortrait] = useState(false)
 
@@ -60,6 +61,8 @@ export default function Home() {
             OverviewConfig={config}
             HudConfigs={liveLaunchHudConfig}
             isPhonePortrait={isPhonePortrait}
+            drawerOpen={drawerOpen}
+            setDrawerOpen={setDrawerOpen}
           />
         )}
 
@@ -77,7 +80,7 @@ export default function Home() {
             Go higher
           </button>
         </div>
-        <Object isPhonePortrait={isPhonePortrait} />
+        <Object isPhonePortrait={isPhonePortrait} drawerOpen={drawerOpen} />
       </div>
     </div>
   )

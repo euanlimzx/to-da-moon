@@ -24,7 +24,8 @@
         "recharts": "^2.15.1",
         "socket.io-client": "^4.8.1",
         "three": "^0.174.0",
-        "three-csg-ts": "^3.1.6"
+        "three-csg-ts": "^3.1.6",
+        "vaul": "^1.1.2"
     },
     "devDependencies": {
         "@eslint/eslintrc": "^3",

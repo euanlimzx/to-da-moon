@@ -44,9 +44,10 @@ const Lights = () => {
 
 interface ObjectProps {
   isPhonePortrait: boolean
+  drawerOpen: boolean
 }
 
-const Object: React.FC<ObjectProps> = ({ isPhonePortrait }) => {
+const Object: React.FC<ObjectProps> = ({ isPhonePortrait, drawerOpen }) => {
   return (
     <div id="world" style={{ width: '130vw', height: '100Vh' }}>
       <Canvas
@@ -60,7 +61,7 @@ const Object: React.FC<ObjectProps> = ({ isPhonePortrait }) => {
       >
         <fog attach="fog" args={[0xf7d9aa, 300, 950]} />
         <Lights />
-        <Rocket isPhonePortrait={isPhonePortrait} />
+        <Rocket isPhonePortrait={isPhonePortrait} drawerOpen={drawerOpen} />
         <ParticleSystem />
       </Canvas>
     </div>

@@ -11,7 +11,7 @@ const DARK_GREY = '#4d4d4d'
 // const WINDOW_BLUE = '#2a8ac9'
 const THRUSTER_ORANGE = '#ff9a40'
 
-const Rocket = ({ isPhonePortrait }) => {
+const Rocket = ({ isPhonePortrait, drawerOpen }) => {
   const rocketRef = useRef<THREE.Group>(null)
 
   // Animation loop
@@ -20,7 +20,7 @@ const Rocket = ({ isPhonePortrait }) => {
 
     // adds the initial shakiness to the rocket flying upwards
     if (
-      (isPhonePortrait && rocketRef.current.position.y < 145) ||
+      (isPhonePortrait && drawerOpen && rocketRef.current.position.y < 145) ||
       rocketRef.current.position.y < 50
     ) {
       rocketRef.current.position.y += 1
@@ -28,6 +28,12 @@ const Rocket = ({ isPhonePortrait }) => {
       rocketRef.current.rotation.x = Math.random() * Math.sin(1) * 0.04
       rocketRef.current.rotation.z = Math.random() * Math.sin(1) * 0.04
       rocketRef.current.position.z = Math.random() * Math.PI * 0.5
+    } else if (
+      isPhonePortrait &&
+      !drawerOpen &&
+      rocketRef.current.position.y > 55
+    ) {
+      rocketRef.current.position.y -= 1
     }
 
     // subsequent rotation of the rocket as it is in stable flight mode
