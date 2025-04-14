@@ -13,6 +13,44 @@ const OrientationPage = () => {
         gamma: number | null
     }>({ alpha: null, beta: null, gamma: null })
 
+    const [permissionGranted, setPermissionGranted] = useState(false)
+
+    const handleOrientation = (event: DeviceOrientationEvent) => {
+        setOrientation({
+            alpha: event.alpha,
+            beta: event.beta,
+            gamma: event.gamma,
+        })
+    }
+
+    // User-triggered function to request permission and add listener
+    const enableOrientation = async () => {
+        if (
+            typeof DeviceOrientationEvent !== 'undefined' &&
+            typeof DeviceOrientationEvent.requestPermission === 'function'
+        ) {
+            try {
+                const permission =
+                    await DeviceOrientationEvent.requestPermission()
+                if (permission === 'granted') {
+                    window.addEventListener(
+                        'deviceorientation',
+                        handleOrientation
+                    )
+                    setPermissionGranted(true)
+                }
+            } catch (error) {
+                console.error('Permission error:', error)
+            }
+        } else {
+            // Non-iOS devices
+            window.addEventListener('deviceorientation', handleOrientation)
+            setPermissionGranted(true)
+        }
+    }
+
+    // Cleanup with useEffect
+
     useEffect(() => {
         let watchId = null
         // Geolocation
@@ -35,51 +73,18 @@ const OrientationPage = () => {
             console.warn('Geolocation not supported')
         }
 
-        // Device Orientation
-        const handleOrientation = (event: DeviceOrientationEvent) => {
-            setOrientation({
-                alpha: event.alpha,
-                beta: event.beta,
-                gamma: event.gamma,
-            })
-        }
-
-        if (typeof window !== 'undefined' && window.DeviceOrientationEvent) {
-            if (
-                typeof DeviceOrientationEvent.requestPermission === 'function'
-            ) {
-                // For iOS 13+ devices
-                DeviceOrientationEvent.requestPermission()
-                    .then((response) => {
-                        if (response === 'granted') {
-                            window.addEventListener(
-                                'deviceorientation',
-                                handleOrientation
-                            )
-                        }
-                    })
-                    .catch(console.error)
-            } else {
-                window.addEventListener('deviceorientation', handleOrientation)
-            }
-        } else {
-            console.warn('DeviceOrientation not supported')
-        }
-
         return () => {
-            window.removeEventListener('deviceorientation', handleOrientation)
-            return () => {
-                if (watchId) {
-                    navigator.geolocation.clearWatch(watchId)
-                }
-
-                window.removeEventListener(
-                    'deviceorientation',
-                    handleOrientation
-                )
+            if (watchId) {
+                navigator.geolocation.clearWatch(watchId)
             }
         }
     }, [])
+
+    useEffect(() => {
+        return () => {
+            window.removeEventListener('deviceorientation', handleOrientation)
+        }
+    }, []) // Empty deps: runs on unmount
 
     return (
         <div style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
@@ -96,7 +101,9 @@ const OrientationPage = () => {
                     <p>Getting location...</p>
                 )}
             </section>
-
+            {!permissionGranted && (
+                <button onClick={enableOrientation}>Enable Orientation</button>
+            )}
             <section>
                 <h2>Orientation</h2>
                 <p>Alpha (Z - compass): {orientation.alpha ?? 'N/A'}</p>
