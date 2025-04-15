@@ -9,50 +9,16 @@ const ArrowToTarget = ({
 }) => {
   const [isOnTarget, setIsOnTarget] = useState(false)
   const [bearingToTarget, setBearingToTarget] = useState(null)
-  const [cssRotate, setCssRotate] = useState(null)
+  const [cssRotate, setCssRotate] = useState(0)
 
-  // Calculate bearing when coordinates change
-  useEffect(() => {
-    if (
-      deviceLat != null &&
-      deviceLng != null &&
-      targetLat != null &&
-      targetLng != null &&
-      deviceOrientation != null
-    ) {
-      const bearing = calcDegreeToPoint(
-        deviceLat,
-        deviceLng,
-        targetLat,
-        targetLng
-      )
-      if (bearing < 0) {
-        setBearingToTarget(bearing + 360)
-      } else {
-        setBearingToTarget(bearing)
-      }
-      // Determine if device is pointing toward target (within ±15 degrees)
-      // ±15 degree
-      if (
-        (bearing < Math.abs(deviceOrientation) &&
-          bearing + 15 > Math.abs(deviceOrientation)) ||
-        bearing > Math.abs(deviceOrientation + 15) ||
-        bearing < Math.abs(deviceOrientation)
-      ) {
-        setIsOnTarget(false)
-      } else if (bearing) {
-        setIsOnTarget(true)
-      }
+  const normalizeAngle = (angle) => ((angle % 360) + 360) % 360
 
-      let rotation = (bearingToTarget - deviceOrientation + 360) % 360
+  const getShortestRotation = (from, to) => {
+    const delta = ((to - from + 540) % 360) - 180
+    return from + delta
+  }
 
-      if (rotation > 180) {
-        rotation -= 360
-      }
-      setCssRotate(rotation)
-    }
-  }, [deviceLat, deviceLng, targetLat, targetLng, deviceOrientation])
-
+  // Calculate bearing to target
   const calcDegreeToPoint = (
     deviceLatitude,
     deviceLongitude,
@@ -70,8 +36,38 @@ const ArrowToTarget = ({
         Math.cos(phi) * Math.tan(phiK) -
           Math.sin(phi) * Math.cos(lambdaK - lambda)
       )
-    return Math.round(psi)
+    return normalizeAngle(psi)
   }
+
+  useEffect(() => {
+    if (
+      deviceLat != null &&
+      deviceLng != null &&
+      targetLat != null &&
+      targetLng != null &&
+      deviceOrientation != null
+    ) {
+      const bearing = calcDegreeToPoint(
+        deviceLat,
+        deviceLng,
+        targetLat,
+        targetLng
+      )
+      setBearingToTarget(bearing)
+
+      const normalizedDeviceOrientation = normalizeAngle(deviceOrientation)
+
+      // Determine if device is pointing toward target (within ±15 degrees)
+      const diff = Math.abs(bearing - normalizedDeviceOrientation)
+      const shortestDiff = Math.min(diff, 360 - diff)
+      setIsOnTarget(shortestDiff <= 15)
+
+      // Compute shortest rotation from current cssRotate to target bearing
+      setCssRotate((prev) =>
+        getShortestRotation(prev, bearing - normalizedDeviceOrientation)
+      )
+    }
+  }, [deviceLat, deviceLng, targetLat, targetLng, deviceOrientation])
 
   if (
     deviceLat == null ||
@@ -121,7 +117,7 @@ const ArrowToTarget = ({
       </div>
       <div className="compass-info">
         <p>Bearing to target: {bearingToTarget?.toFixed(1)}°</p>
-        <p>Device heading: {deviceOrientation.toFixed(1)}°</p>
+        <p>Device heading: {normalizeAngle(deviceOrientation).toFixed(1)}°</p>
       </div>
     </div>
   )
