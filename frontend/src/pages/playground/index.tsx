@@ -25,8 +25,8 @@ const OrientationPage = () => {
     latitude: number | null
     longitude: number | null
   }>({
-    latitude: null,
-    longitude: null,
+    latitude: 21.422487,
+    longitude: 39.826206,
   })
 
   const [permissionGranted, setPermissionGranted] = useState(false)
@@ -34,7 +34,10 @@ const OrientationPage = () => {
 
   const handleOrientation = (event: DeviceOrientationEvent) => {
     setOrientation({
-      alpha: event.alpha,
+      alpha:
+        event.webkitCompassHeading !== undefined
+          ? event.webkitCompassHeading
+          : event.alpha,
       beta: event.beta,
       gamma: event.gamma,
     })
@@ -52,7 +55,7 @@ const OrientationPage = () => {
           DeviceOrientationEvent as any
         ).requestPermission()
         if (permission === 'granted') {
-          window.addEventListener('deviceorientation', handleOrientation)
+          window.addEventListener('deviceorientation', handleOrientation, true)
           setPermissionGranted(true)
         } else {
           console.error('Permission not granted')
@@ -62,7 +65,7 @@ const OrientationPage = () => {
       }
     } else {
       // Non-iOS devices or older iOS versions
-      window.addEventListener('deviceorientation', handleOrientation)
+      window.addEventListener('deviceorientation', handleOrientation, true)
       setPermissionGranted(true)
     }
   }
