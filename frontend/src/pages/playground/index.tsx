@@ -26,7 +26,7 @@ const OrientationPage = () => {
     longitude: number | null
   }>({
     latitude: 34.0666,
-    longitude: 118.4484,
+    longitude: 39.826206,
   })
 
   const [permissionGranted, setPermissionGranted] = useState(false)

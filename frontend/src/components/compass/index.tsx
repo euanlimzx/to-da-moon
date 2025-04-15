@@ -87,7 +87,7 @@ const ArrowToTarget = ({
     <div className="compass-container">
       <div
         style={{
-          transform: `rotate(${-cssRotate}deg)`,
+          transform: `rotate(${cssRotate}deg)`,
           transition: 'transform 0.2s linear',
           width: '50px',
           height: '50px',
