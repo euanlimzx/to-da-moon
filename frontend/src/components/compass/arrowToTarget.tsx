@@ -76,7 +76,7 @@ const ArrowToTarget = ({
     targetLng == null ||
     deviceOrientation == null
   ) {
-    return <div>Waiting for data...</div>
+    return <div>Unable to configure geolocation API</div>
   }
 
   return (

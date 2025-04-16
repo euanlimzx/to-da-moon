@@ -1,6 +1,6 @@
 // pages/orientation.tsx
 import { useEffect, useState } from 'react'
-import ArrowToTarget from '@/components/compass'
+import ArrowToTarget from '@/components/compass/arrowToTarget'
 
 // TypeScript declaration for DeviceOrientationEvent.requestPermission
 declare global {
