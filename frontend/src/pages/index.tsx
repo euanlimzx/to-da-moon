@@ -1,12 +1,14 @@
 import Background from '@/components/background'
 import Dashboard from '@/components/dashboard'
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import { socket } from '../socket'
 import Object from '@/components/rocket-object'
 import axios from 'axios'
 import { backend } from '../socket'
 import { OverviewConfig } from '@/types/HudTypes'
 import { liveLaunchHudConfig } from '@/hudConfig'
+import RoomHeader from '@/components/roomHeader'
 
 const PHONE_MAX_WIDTH = 435
 
@@ -15,12 +17,15 @@ export default function Home() {
   const [values, setValues] = useState([])
   const [config, setConfig] = useState<null | OverviewConfig>(null)
   const [drawerOpen, setDrawerOpen] = useState(true)
-
+  const [roomCode, setRoomCode] = useState<string | null>(null)
   const [isPhonePortrait, setIsPhonePortrait] = useState(false)
+  const isAdminMode = useRouter().query.password === 'admin'
 
   const updateMedia = () => {
     setIsPhonePortrait(window.innerWidth < PHONE_MAX_WIDTH)
   }
+
+
 
   useEffect(() => {
     updateMedia()
@@ -45,6 +50,8 @@ export default function Home() {
     socket.on('live/config', (message) => {
       setConfig(message)
     })
+
+
     return () => {
       socket.off('live/broadcast-data-stream')
       socket.off('live/update-config')

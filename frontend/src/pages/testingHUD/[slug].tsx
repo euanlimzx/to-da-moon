@@ -41,6 +41,9 @@ export default function Page() {
             })
         
         // Set up the socket listener to receive the data stream
+        socket.on("connect", () => {
+            console.log("connected", socket.id)
+        })
         socket.on('static/receive-data-stream', (message: string[]) => {
             setValues(message) // Update state with the latest values
             console.log(message)
@@ -85,6 +88,10 @@ export default function Page() {
                 console.log(message)
             }
         })
+
+        socket.on('countDown', (count) => {
+            console.log(count)
+        })
         // Clean up the socket listener on component unmount
         return () => {
             socket.off('static/receive-data-stream') // Unsubscribe to avoid memory leaks
@@ -93,6 +100,10 @@ export default function Page() {
         
     }, [isAdminMode])
 
+    useEffect(() =>{
+
+    }, [roomCode])
+
     // do we also need to handle when same data is requested again or this doesn't matter?
     // Emit an event to get the data stream based on the slug in the URL
     const buttonFn = () => {
@@ -100,14 +111,43 @@ export default function Page() {
         socket.emit('static/get-data-stream', router.query.slug)
     }
 
+    const handleRoomJoin = (roomCodeInput: string) => {
+        //TODO: add validation to check if room code is valid
+        setRoomCode(roomCodeInput)
+        if (roomCode) {
+            //socket.emit('static/join-room', roomCodeInput);
+        }
+    }
+    const commenceCountdown = () => {
+        // join room code
+        socket.emit('joinRoom', roomCode)
+        if (roomCode) {
+            console.log(`Commencing countdown for room: ${roomCode}`);
+            socket.emit('countDown', roomCode);
+        } else {
+            console.error('No room code available to commence countdown.');
+        }
+    };
+
     const generateRoomCode = () => {
         const roomCode = Math.random().toString(36).substring(2, 10);
         console.log("room",roomCode);
         return roomCode;
     }
+
     return (
         <>
-            <RoomHeader roomCode={roomCode} isAdminMode={isAdminMode}/>
+            <RoomHeader roomCode={roomCode} handleRoomJoin={handleRoomJoin} isAdminMode={isAdminMode}/>
+            {isAdminMode && (
+                <div className="flex justify-center mt-4">
+                    <button
+                        className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
+                        onClick={commenceCountdown}
+                    >
+                        Commence Countdown!
+                    </button>
+                </div>
+            )}
             <Button buttonFn={buttonFn} />
             <LinearGraph data={data} dataName={"Fuel-Tank"}/>
             {Overviewconfig && <Dashboard isPhonePortrait={false} OverviewConfig={Overviewconfig} HudConfigs={HudConfigs}/>}
