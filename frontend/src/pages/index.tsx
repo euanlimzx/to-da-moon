@@ -29,15 +29,15 @@ export default function Home() {
   })
 
   useEffect(() => {
-    // axios
-    //     .get(`${backend}/live/config`)
-    //     .then((response) => {
-    //         setConfig(response.data) // Assuming response.data is an object
-    //     })
-    //     .catch((error) => {
-    //         console.error('Error fetching data:', error)
-    //     })
-    setConfig(true)
+    axios
+      .get(`${backend}live/config`)
+      .then((response) => {
+        setConfig(response.data) // Assuming response.data is an object
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error)
+        setConfig(null)
+      })
     socket.on('live/broadcast-data-stream', (message) => {
       const val = Object.values(message)
       setValues(val)
@@ -65,21 +65,6 @@ export default function Home() {
             setDrawerOpen={setDrawerOpen}
           />
         )}
-
-        <div className="absolute flex h-full w-full items-end">
-          {/* no error handling here yet, but increasing the button past the array index will cause it to go out of bounds 
-
-        that should not be an issue with the final web app since we are changing the gradient based on altitue -- we will never go past the end of the array
-        */}
-          <button
-            onClick={() =>
-              setRocketHeight((intialRocketHeight) => intialRocketHeight + 1)
-            }
-            className="bg-black"
-          >
-            Go higher
-          </button>
-        </div>
         <Object isPhonePortrait={isPhonePortrait} drawerOpen={drawerOpen} />
       </div>
     </div>
