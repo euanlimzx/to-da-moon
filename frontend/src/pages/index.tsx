@@ -38,12 +38,12 @@ export default function Home() {
         console.error('Error fetching data:', error)
         setConfig(null)
       })
-    socket.on('live/broadcast-data-stream', (message) => {
-      const val = Object.values(message)
-      setValues(val)
-    })
     socket.on('live/config', (message) => {
       setConfig(message)
+    })
+    socket.on('live/broadcast-data-stream', (message) => {
+      console.log('receiving on index', message)
+      setValues(message)
     })
     return () => {
       socket.off('live/broadcast-data-stream')
@@ -59,7 +59,7 @@ export default function Home() {
         {config && (
           <Dashboard
             OverviewConfig={config}
-            HudConfigs={liveLaunchHudConfig}
+            HudConfigs={values}
             isPhonePortrait={isPhonePortrait}
             drawerOpen={drawerOpen}
             setDrawerOpen={setDrawerOpen}

@@ -1,10 +1,8 @@
-import DarkCard from "./darkCard";
-import { ChartLine } from "lucide-react";
+import DarkCard from './darkCard'
+import { ChartLine } from 'lucide-react'
 import React from 'react'
-import MetricProgressBar from "./metricProgressBar";
-import { HudConfig, OverviewConfig } from "@/types/HudTypes";
-
-
+import MetricProgressBar from './metricProgressBar'
+import { HudConfig, OverviewConfig } from '@/types/HudTypes'
 
 /*
 Dropdown: 
@@ -21,7 +19,6 @@ interface MetricsProps {
   HudConfigs: HudConfig[]
   OverviewConfig: OverviewConfig
 }
-
 
 /*
 <MetricProgressBar
@@ -44,27 +41,24 @@ interface MetricsProps {
 />
 */
 
-
-const Metrics = ({HudConfigs, OverviewConfig}: MetricsProps) => {
+const Metrics = ({ HudConfigs, OverviewConfig }: MetricsProps) => {
   function graphIcon() {
-    return (
-        <ChartLine/>
-    )
+    return <ChartLine />
   }
   return (
     <div className="">
-        <DarkCard header="SENSORS" headerIcon={graphIcon()}>
+      <DarkCard header="SENSORS" headerIcon={graphIcon()}>
         <div className="space-y-4">
-                {HudConfigs?.map((config, index) => (
-                    <div key={`${index}`}>
-                        <MetricProgressBar 
-                            metricConfig={config}
-                            OverviewConfig={OverviewConfig}
-                        /> 
-                    </div>
-                ))}
+          {HudConfigs?.map((config, index) => (
+            <div key={`${index}`}>
+              <MetricProgressBar
+                metricConfig={config}
+                OverviewConfig={OverviewConfig}
+              />
             </div>
-        </DarkCard>
+          ))}
+        </div>
+      </DarkCard>
     </div>
   )
 }

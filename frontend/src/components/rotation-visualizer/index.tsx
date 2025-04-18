@@ -127,8 +127,6 @@ const RotationVisualizer = ({ isPhonePortrait }) => {
     }
   }
 
-  console.log(orientation)
-
   return (
     <DarkCard padding={2} hideOverflow>
       <h2 className="text-center text-xl font-semibold">Orientation</h2>
