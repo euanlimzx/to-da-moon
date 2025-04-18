@@ -8,11 +8,13 @@ const LinearGraph = dynamic(
     () => import('@/components/dashboard/linearGraph'),
     { ssr: false }
 )
+import { Input } from 'antd';
 import axios from 'axios'
 import { backend } from '../../socket'
 import { liveLaunchHudConfig } from '@/hudConfig'
 import { OverviewConfig, HudConfig } from '@/types/HudTypes'
 import { Gauge } from '@/components/gauge'
+import RoomHeader from '@/components/roomHeader'
 
 //need a way to parse all the values from the csv file and create a mapping
 export default function Page() {
@@ -21,8 +23,11 @@ export default function Page() {
     const [data, setData] = useState<{ [key: string]: number }[]>([]) //this is a placeholder for testing, we eventually want to have multiple data streams
     const [Overviewconfig, setViewConfig] = useState<null | OverviewConfig>(null)
     const [HudConfigs, setHudConfigs] = useState<HudConfig[]>(liveLaunchHudConfig)
+    const [roomCode, setRoomCode] = useState<string | null>(null);
+
     const router = useRouter()
 
+    const isAdminMode = router.query.password === 'admin';
     
     useEffect(() => {
 
@@ -68,7 +73,11 @@ export default function Page() {
                 return newData
             })
         })
-
+        
+        if (isAdminMode) {
+            const roomCode = generateRoomCode();
+            setRoomCode(roomCode);
+        }
         // anything error / finish causing stream to end
         socket.on('static/receive-data-stream-end', (message: string) => {
             if (message != 'Finished streaming data') {
@@ -81,7 +90,8 @@ export default function Page() {
             socket.off('static/receive-data-stream') // Unsubscribe to avoid memory leaks
             socket.off('static/receive-data-stream-end') // Unsubscribe to avoid memory leaks
         }
-    }, [])
+        
+    }, [isAdminMode])
 
     // do we also need to handle when same data is requested again or this doesn't matter?
     // Emit an event to get the data stream based on the slug in the URL
@@ -90,11 +100,17 @@ export default function Page() {
         socket.emit('static/get-data-stream', router.query.slug)
     }
 
+    const generateRoomCode = () => {
+        const roomCode = Math.random().toString(36).substring(2, 10);
+        console.log("room",roomCode);
+        return roomCode;
+    }
     return (
         <>
+            <RoomHeader roomCode={roomCode} isAdminMode={isAdminMode}/>
             <Button buttonFn={buttonFn} />
             <LinearGraph data={data} dataName={"Fuel-Tank"}/>
-            {Overviewconfig && <Dashboard OverviewConfig={Overviewconfig} HudConfigs={HudConfigs}/>}
+            {Overviewconfig && <Dashboard isPhonePortrait={false} OverviewConfig={Overviewconfig} HudConfigs={HudConfigs}/>}
             {values.map((value) => {
                 return (
                     <Gauge
@@ -106,6 +122,7 @@ export default function Page() {
                 )
             })}
 
+        
             {error && (
                 <div className="align-center flex justify-center text-red-500">
                     {error}
