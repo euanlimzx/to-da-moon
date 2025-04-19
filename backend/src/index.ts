@@ -23,6 +23,34 @@ const configFilePath = path.join(__dirname, "live-config.json");
 // make the websocket a global variable that is available to all
 app.set("io", io);
 
+io.on("connection", (socket)=> {
+  console.log(`Client connected: ${socket.id}`);
+
+  socket.on("joinRoom", (roomCode: string) => {
+    socket.join(roomCode)
+    console.log(`Client joined room: ${roomCode}`);
+  })
+
+  socket.on("countDown", (roomCode: string) =>{
+    startCountdown(roomCode)
+  })
+})
+
+//countdown helper
+function startCountdown(roomCode: string) {
+  let count = 5;
+  const interval = setInterval(() => {
+    if (count >= -1) {
+      io.to(roomCode).emit("countDown", count);
+      count--;
+    } else {
+      clearInterval(interval);
+      io.to(roomCode).emit("start");
+    }
+  }, 1000);
+}
+
+
 // POST route to update config
 app.post("/live/config", (req, res) => {
   // Read the current config.json file

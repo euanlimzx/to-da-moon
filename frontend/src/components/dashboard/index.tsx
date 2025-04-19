@@ -12,6 +12,9 @@ interface DashboardProps {
   HudConfigs: HudConfig[]
   isPhonePortrait: boolean
   target: target
+  drawerOpen: boolean
+  setDrawerOpen: (open: boolean) => void
+  Adminmode?: boolean
 }
 
 export default function Dashboard({
@@ -21,13 +24,9 @@ export default function Dashboard({
   drawerOpen,
   setDrawerOpen,
   target,
+  Adminmode = false,
 }: DashboardProps) {
-  /*TODO: Samuel 
-        refactoring: 
-        - metrics should be passed in a list of configs
-        - for each config map one of the data display component based on the config
-    */
-
+  
   return (
     <div className="md:p-4 absolute z-30 h-screen w-screen p-10 mobile-portrait:p-4">
       <Timeline OverviewConfig={OverviewConfig} />

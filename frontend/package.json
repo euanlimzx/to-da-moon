@@ -9,6 +9,7 @@
         "lint": "next lint"
     },
     "dependencies": {
+        "@ant-design/v5-patch-for-react-19": "^1.0.3",
         "@react-three/drei": "^10.0.5",
         "@react-three/fiber": "^9.1.1",
         "@three.ez/instanced-mesh": "^0.3.1",
