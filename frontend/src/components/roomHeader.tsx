@@ -1,7 +1,6 @@
 import Input from 'antd/es/input/Input';
 import { Button } from 'antd'; // Ant Design Button for a modern look
 import { useState } from 'react';
-import '@ant-design/v5-patch-for-react-19';
 
 interface RoomHeaderProps {
     roomCode: string | null;
