@@ -53,6 +53,7 @@ export default function Home() {
 
     return () => {
       socket.off('live/broadcast-data-stream')
+      socket.off('live/broadcast-data-stream-latlng')
       socket.off('live/update-config')
     }
   }, [])

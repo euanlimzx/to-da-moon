@@ -41,6 +41,7 @@ export default function Dashboard({
             isPhonePortrait={isPhonePortrait}
             drawerOpen={drawerOpen}
             setDrawerOpen={setDrawerOpen}
+            target={target}
           />
         </div>
       ) : (

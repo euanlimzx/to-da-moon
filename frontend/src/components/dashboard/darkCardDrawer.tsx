@@ -10,6 +10,7 @@ export default function DarkCardDrawer({
   isPhonePortrait,
   drawerOpen,
   setDrawerOpen,
+  target,
 }) {
   return (
     <Drawer.Root defaultOpen open={drawerOpen} onOpenChange={setDrawerOpen}>
@@ -30,7 +31,7 @@ export default function DarkCardDrawer({
             <div className="scroll no-scrollbar overflow-y-auto">
               <div className="flex flex-col gap-4">
                 <div>
-                  <Overview config={OverviewConfig} />
+                  <Overview config={OverviewConfig} target={target} />
                 </div>
                 <div>
                   <Metrics
