@@ -40,7 +40,7 @@ io.on("connection", (socket)=> {
 function startCountdown(roomCode: string) {
   let count = 5;
   const interval = setInterval(() => {
-    if (count >= 0) {
+    if (count >= -1) {
       io.to(roomCode).emit("countDown", count);
       count--;
     } else {

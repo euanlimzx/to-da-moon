@@ -15,6 +15,7 @@ import { liveLaunchHudConfig } from '@/hudConfig'
 import { OverviewConfig, HudConfig } from '@/types/HudTypes'
 import { Gauge } from '@/components/gauge'
 import RoomHeader from '@/components/roomHeader'
+import CountDown from '@/components/background/countDown'
 
 //need a way to parse all the values from the csv file and create a mapping
 export default function Page() {
@@ -24,7 +25,7 @@ export default function Page() {
     const [Overviewconfig, setViewConfig] = useState<null | OverviewConfig>(null)
     const [HudConfigs, setHudConfigs] = useState<HudConfig[]>(liveLaunchHudConfig)
     const [roomCode, setRoomCode] = useState<string | null>(null);
-
+    const [time, setTime] = useState<number>(-1);
     const router = useRouter()
 
     const isAdminMode = router.query.password === 'admin';
@@ -90,7 +91,8 @@ export default function Page() {
         })
 
         socket.on('countDown', (count) => {
-            console.log(count)
+            console.log("Count",count)
+            setTime(count)
         })
         // Clean up the socket listener on component unmount
         return () => {
@@ -114,13 +116,12 @@ export default function Page() {
     const handleRoomJoin = (roomCodeInput: string) => {
         //TODO: add validation to check if room code is valid
         setRoomCode(roomCodeInput)
-        if (roomCode) {
-            //socket.emit('static/join-room', roomCodeInput);
+        if (roomCodeInput) {
+            socket.emit('joinRoom', roomCodeInput);
         }
     }
+    
     const commenceCountdown = () => {
-        // join room code
-        socket.emit('joinRoom', roomCode)
         if (roomCode) {
             console.log(`Commencing countdown for room: ${roomCode}`);
             socket.emit('countDown', roomCode);
@@ -137,6 +138,7 @@ export default function Page() {
 
     return (
         <>
+            <CountDown time={time}/>
             <RoomHeader roomCode={roomCode} handleRoomJoin={handleRoomJoin} isAdminMode={isAdminMode}/>
             {isAdminMode && (
                 <div className="flex justify-center mt-4">
