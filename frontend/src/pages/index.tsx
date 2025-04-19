@@ -19,8 +19,8 @@ export default function Home() {
   const [values, setValues] = useState([])
   const [config, setConfig] = useState<null | OverviewConfig>(null)
   const [drawerOpen, setDrawerOpen] = useState(true)
-  const [roomCode, setRoomCode] = useState<string | null>(null)  const [targetLatLng, setTargetLatLng] = useState<target | null>(null)
-
+  const [roomCode, setRoomCode] = useState<string | null>(null)  
+  const [targetLatLng, setTargetLatLng] = useState<target | null>(null)
   const [isPhonePortrait, setIsPhonePortrait] = useState(false)
   const isAdminMode = useRouter().query.password === 'admin'
   const [time, setTime] = useState<number>(-1)
@@ -78,6 +78,8 @@ export default function Home() {
     })
 
     return () => {
+      socket.off('connect')
+      socket.off('countDown')
       socket.off('live/broadcast-data-stream')
       socket.off('live/broadcast-data-stream-latlng')
       socket.off('live/update-config')
@@ -109,11 +111,10 @@ export default function Home() {
 
   return (
     <div>
-      <Background height={rocketHeight} />
       <CountDown time={time} />
       <RoomHeader roomCode={roomCode} handleRoomJoin={handleRoomJoin} isAdminMode={isAdminMode} />
       {isAdminMode && (
-          <div className="flex justify-center mt-4">
+          <div className="flex justify-center m-4">
               <button
                   className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
                   onClick={commenceCountdown}
@@ -122,6 +123,7 @@ export default function Home() {
               </button>
           </div>
       )}
+      <Background height={rocketHeight} />
       <div className="flex h-screen w-screen items-center justify-center">
         {config && (
           <Dashboard

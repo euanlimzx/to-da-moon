@@ -12,7 +12,7 @@ const RoomHeader = ({ roomCode, handleRoomJoin, isAdminMode = false }: RoomHeade
     const [ roomCodeInput, setRoomCodeInput ] = useState<string>('');
 
     return (
-        <div className="top-0 left-0 w-full bg-gray-800 text-white z-50 p-4 shadow-md">
+        <div className="top-0 left-0 w-full text-white z-50 p-4 shadow-md">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
                 <div className="flex flex-col space-y-2">
                     {isAdminMode && <h1 className="text-2xl font-bold">Admin Mode</h1>}
