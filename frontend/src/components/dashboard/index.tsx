@@ -5,11 +5,13 @@ import Metrics from './metrics'
 import Overview from './overview'
 import { OverviewConfig } from '@/types/HudTypes'
 import DarkCardDrawer from './darkCardDrawer'
+import { target } from '../compass/dashboardCompassController'
 
 interface DashboardProps {
   OverviewConfig: OverviewConfig
   HudConfigs: HudConfig[]
   isPhonePortrait: boolean
+  target: target
 }
 
 export default function Dashboard({
@@ -18,6 +20,7 @@ export default function Dashboard({
   isPhonePortrait,
   drawerOpen,
   setDrawerOpen,
+  target,
 }: DashboardProps) {
   /*TODO: Samuel 
         refactoring: 
@@ -44,7 +47,7 @@ export default function Dashboard({
         <div className="md:mt-4 mt-10 flex w-full items-start justify-between">
           <div className="flex h-full w-full flex-col gap-4">
             <div className="lg:w-1/4 w-1/2">
-              <Overview config={OverviewConfig} />
+              <Overview config={OverviewConfig} target={target} />
             </div>
             <div className="lg:w-1/4 h-64 w-1/2">
               <RotationVisualizer />

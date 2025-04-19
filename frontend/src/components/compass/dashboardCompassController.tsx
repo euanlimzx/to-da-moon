@@ -9,7 +9,15 @@ declare global {
   }
 }
 
-const DashboardCompassController = () => {
+export interface target {
+  latitude?: number
+  longitude?: number
+}
+
+const DashboardCompassController = ({ target }: { target: target }) => {
+  if (!target || !target.latitude || !target.longitude) {
+    return <p>waiting for gps data...</p>
+  }
   const [device, setDevice] = useState<{
     latitude: number
     longitude: number
@@ -20,14 +28,6 @@ const DashboardCompassController = () => {
     beta: number | null
     gamma: number | null
   }>({ alpha: null, beta: null, gamma: null })
-
-  const [target, setTarget] = useState<{
-    latitude: number | null
-    longitude: number | null
-  }>({
-    latitude: 34.0706281,
-    longitude: -118.4463268,
-  })
 
   const [permissionGranted, setPermissionGranted] = useState(false)
   const [locationError, setLocationError] = useState<string | null>(null)

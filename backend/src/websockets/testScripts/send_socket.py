@@ -4,6 +4,7 @@ import random
 
 WEBSOCKET_ADDRESS = "http://localhost:3000"
 LIVE_DATA_PUSH_CHANNEL = "live/receive-data-stream-from-mqtt"
+TARGET_LAT_LNG = "live/receive-data-stream-from-mqtt-latlng"
 
 def main():
     with socketio.SimpleClient() as sio:
@@ -35,6 +36,11 @@ def main():
             }
         ]
 
+        targetLatLng = {
+            "latitude": 34.0671461,
+            "longitude":-118.4506155
+        }
+
         while True:
             data = []
             for item in data_template:
@@ -43,6 +49,7 @@ def main():
                 data.append(new_item)
 
             sio.emit(LIVE_DATA_PUSH_CHANNEL, data)
+            sio.emit(TARGET_LAT_LNG, targetLatLng)
             print("Data sent:", data)
 
 if __name__ == "__main__":

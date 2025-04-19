@@ -7,6 +7,7 @@ import axios from 'axios'
 import { backend } from '../socket'
 import { OverviewConfig } from '@/types/HudTypes'
 import { liveLaunchHudConfig } from '@/hudConfig'
+import { target } from '@/components/compass/dashboardCompassController'
 
 const PHONE_MAX_WIDTH = 435
 
@@ -15,6 +16,7 @@ export default function Home() {
   const [values, setValues] = useState([])
   const [config, setConfig] = useState<null | OverviewConfig>(null)
   const [drawerOpen, setDrawerOpen] = useState(true)
+  const [targetLatLng, setTargetLatLng] = useState<target | null>(null)
 
   const [isPhonePortrait, setIsPhonePortrait] = useState(false)
 
@@ -42,9 +44,13 @@ export default function Home() {
       setConfig(message)
     })
     socket.on('live/broadcast-data-stream', (message) => {
-      console.log('receiving on index', message)
       setValues(message)
     })
+    socket.on('live/broadcast-data-stream-latlng', (message) => {
+      console.log(message)
+      setTargetLatLng(message)
+    })
+
     return () => {
       socket.off('live/broadcast-data-stream')
       socket.off('live/update-config')
@@ -62,7 +68,9 @@ export default function Home() {
             HudConfigs={values}
             isPhonePortrait={isPhonePortrait}
             drawerOpen={drawerOpen}
+            targetLatLng={targetLatLng}
             setDrawerOpen={setDrawerOpen}
+            target={targetLatLng}
           />
         )}
         <Object isPhonePortrait={isPhonePortrait} drawerOpen={drawerOpen} />

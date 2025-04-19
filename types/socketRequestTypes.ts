@@ -20,3 +20,11 @@ export interface LiveDataStreamMQTTClientToServer {
 export interface LiveDataStreamServerToClient {
   "live/broadcast-data-stream": (mqttData: MqttData) => void;
 }
+
+export interface LiveDataStreamMQTTClientToServerLatLng {
+  "live/receive-data-stream-from-mqtt-latlng": (mqttData: MqttData) => void;
+}
+
+export interface LiveDataStreamServerToClientLatLng {
+  "live/broadcast-data-stream-latlng": (mqttData: MqttData) => void;
+}

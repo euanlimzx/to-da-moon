@@ -4,6 +4,8 @@ import {
   StaticDataStreamServerToClientEvents,
   LiveDataStreamMQTTClientToServer,
   LiveDataStreamServerToClient,
+  LiveDataStreamMQTTClientToServerLatLng,
+  LiveDataStreamServerToClientLatLng,
 } from "../../../types/socketRequestTypes";
 
 export type StaticDataStreamSocket = Socket<
@@ -16,12 +18,18 @@ export type StaticDataStreamServer = Server<
   StaticDataStreamServerToClientEvents
 >;
 
+type LiveDataStreamClientToServerEvents = LiveDataStreamMQTTClientToServer &
+  LiveDataStreamMQTTClientToServerLatLng;
+
+type LiveDataStreamServerToClientEvents = LiveDataStreamServerToClient &
+  LiveDataStreamServerToClientLatLng;
+
 export type LiveDataStreamSocket = Socket<
-  LiveDataStreamMQTTClientToServer,
-  LiveDataStreamServerToClient
+  LiveDataStreamClientToServerEvents,
+  LiveDataStreamServerToClientEvents
 >;
 
 export type LiveDataStreamServer = Server<
-  LiveDataStreamMQTTClientToServer,
-  LiveDataStreamServerToClient
+  LiveDataStreamClientToServerEvents,
+  LiveDataStreamServerToClientEvents
 >;
