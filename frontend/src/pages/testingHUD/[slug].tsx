@@ -14,7 +14,6 @@ import { backend } from '../../socket'
 import { liveLaunchHudConfig } from '@/hudConfig'
 import { OverviewConfig, HudConfig } from '@/types/HudTypes'
 import { Gauge } from '@/components/gauge'
-import RoomHeader from '@/components/roomHeader'
 import CountDown from '@/components/background/countDown'
 
 //need a way to parse all the values from the csv file and create a mapping
@@ -139,7 +138,6 @@ export default function Page() {
     return (
         <>
             <CountDown time={time}/>
-            <RoomHeader roomCode={roomCode} handleRoomJoin={handleRoomJoin} isAdminMode={isAdminMode}/>
             {isAdminMode && (
                 <div className="flex justify-center mt-4">
                     <button

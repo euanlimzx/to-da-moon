@@ -9,7 +9,6 @@ import { backend } from '../socket'
 import { OverviewConfig } from '@/types/HudTypes'
 import { liveLaunchHudConfig } from '@/hudConfig'
 import { target } from '@/components/compass/dashboardCompassController'
-import RoomHeader from '@/components/roomHeader'
 import CountDown from '@/components/background/countDown'
 
 const PHONE_MAX_WIDTH = 435
@@ -19,12 +18,12 @@ export default function Home() {
   const [values, setValues] = useState([])
   const [config, setConfig] = useState<null | OverviewConfig>(null)
   const [drawerOpen, setDrawerOpen] = useState(true)
-  const [roomCode, setRoomCode] = useState<string | null>(null)  
   const [targetLatLng, setTargetLatLng] = useState<target | null>(null)
   const [isPhonePortrait, setIsPhonePortrait] = useState(false)
   const isAdminMode = useRouter().query.password === 'admin'
   const [time, setTime] = useState<number>(-1)
 
+  const sharedRoomCode = "sharedRoomCode";
   const updateMedia = () => {
     setIsPhonePortrait(window.innerWidth < PHONE_MAX_WIDTH)
   }
@@ -46,11 +45,7 @@ export default function Home() {
     .catch((error) => {
       console.error('Error fetching data:', error)
     })
-    if (isAdminMode) {
-      const roomCode = generateRoomCode();
-      setRoomCode(roomCode);
-    }
-
+  
     setConfig(null)
 
     socket.on("connect", () => {
@@ -71,7 +66,7 @@ export default function Home() {
       console.log(message)
       setTargetLatLng(message)
     })
-
+    socket.emit('joinRoom', sharedRoomCode)
     socket.on('countDown', (count) => {
       console.log("Count",count)
       setTime(count)
@@ -93,26 +88,19 @@ export default function Home() {
   }
 
   const commenceCountdown = () => {
-    if (roomCode) {
-        console.log(`Commencing countdown for room: ${roomCode}`);
-        socket.emit('countDown', roomCode);
+    if (sharedRoomCode) {
+        console.log(`Commencing countdown for room: ${sharedRoomCode}`);
+        socket.emit('countDown', sharedRoomCode);
     } else {
         console.error('No room code available to commence countdown.');
     }
   };
-
-  const handleRoomJoin = (roomCodeInput: string) => {
-    //TODO: add validation to check if room code is valid
-    setRoomCode(roomCodeInput)
-    if (roomCodeInput) {
-        socket.emit('joinRoom', roomCodeInput);
-    }
-  }
+  
+ 
 
   return (
     <div>
       <CountDown time={time} />
-      <RoomHeader roomCode={roomCode} handleRoomJoin={handleRoomJoin} isAdminMode={isAdminMode} />
       {isAdminMode && (
           <div className="flex justify-center m-4">
               <button
