@@ -15,7 +15,7 @@ const PHONE_MAX_WIDTH = 435
 
 export default function Home() {
   const [rocketHeight, setRocketHeight] = useState(0)
-  const [values, setValues] = useState([])
+  const [values, setValues] = useState(null)
   const [config, setConfig] = useState<null | OverviewConfig>(null)
   const [drawerOpen, setDrawerOpen] = useState(true)
   const [targetLatLng, setTargetLatLng] = useState<target | null>(null)
@@ -23,12 +23,10 @@ export default function Home() {
   const isAdminMode = useRouter().query.password === 'admin'
   const [time, setTime] = useState<number>(-1)
 
-  const sharedRoomCode = "sharedRoomCode";
+  const sharedRoomCode = 'sharedRoomCode'
   const updateMedia = () => {
     setIsPhonePortrait(window.innerWidth < PHONE_MAX_WIDTH)
   }
-
-
 
   useEffect(() => {
     updateMedia()
@@ -38,28 +36,28 @@ export default function Home() {
 
   useEffect(() => {
     axios
-    .get(`${backend}live/config`)
-    .then((response) => {
-      setConfig(response.data) // Assuming response.data is an object
-    })
-    .catch((error) => {
-      console.error('Error fetching data:', error)
-    })
-  
+      .get(`${backend}live/config`)
+      .then((response) => {
+        setConfig(response.data) // Assuming response.data is an object
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error)
+      })
+
     setConfig(null)
 
-    socket.on("connect", () => {
-      console.log("connected", socket.id)
+    socket.on('connect', () => {
+      console.log('connected', socket.id)
     })
 
     socket.on('live/broadcast-data-stream', (message) => {
-      const val = Object.values(message)
-      setValues(val)
+      setValues(message)
     })
     socket.on('live/config', (message) => {
       setConfig(message)
     })
     socket.on('live/broadcast-data-stream', (message) => {
+      console.log(message)
       setValues(message)
     })
     socket.on('live/broadcast-data-stream-latlng', (message) => {
@@ -68,7 +66,7 @@ export default function Home() {
     })
     socket.emit('joinRoom', sharedRoomCode)
     socket.on('countDown', (count) => {
-      console.log("Count",count)
+      console.log('Count', count)
       setTime(count)
     })
 
@@ -82,34 +80,32 @@ export default function Home() {
   }, [isAdminMode])
 
   const generateRoomCode = () => {
-    const roomCode = Math.random().toString(36).substring(2, 10);
-    console.log("room",roomCode);
-    return roomCode;
+    const roomCode = Math.random().toString(36).substring(2, 10)
+    console.log('room', roomCode)
+    return roomCode
   }
 
   const commenceCountdown = () => {
     if (sharedRoomCode) {
-        console.log(`Commencing countdown for room: ${sharedRoomCode}`);
-        socket.emit('countDown', sharedRoomCode);
+      console.log(`Commencing countdown for room: ${sharedRoomCode}`)
+      socket.emit('countDown', sharedRoomCode)
     } else {
-        console.error('No room code available to commence countdown.');
+      console.error('No room code available to commence countdown.')
     }
-  };
-  
- 
+  }
 
   return (
     <div>
       <CountDown time={time} />
       {isAdminMode && (
-          <div className="flex justify-center m-4">
-              <button
-                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
-                  onClick={commenceCountdown}
-              >
-                  Commence Countdown!
-              </button>
-          </div>
+        <div className="m-4 flex justify-center">
+          <button
+            className="rounded bg-red-500 px-4 py-2 font-bold text-white hover:bg-red-600"
+            onClick={commenceCountdown}
+          >
+            Commence Countdown!
+          </button>
+        </div>
       )}
       <Background height={rocketHeight} />
       <div className="flex h-screen w-screen items-center justify-center">

@@ -2,7 +2,7 @@ import socketio
 import time
 import random
 
-WEBSOCKET_ADDRESS = "http://localhost:3000"
+WEBSOCKET_ADDRESS = "http://192.168.0.100:3000"
 LIVE_DATA_PUSH_CHANNEL = "live/receive-data-stream-from-mqtt"
 TARGET_LAT_LNG = "live/receive-data-stream-from-mqtt-latlng"
 
@@ -49,7 +49,7 @@ def main():
                 data.append(new_item)
 
             sio.emit(LIVE_DATA_PUSH_CHANNEL, data)
-            sio.emit(TARGET_LAT_LNG, targetLatLng)
+            # sio.emit(TARGET_LAT_LNG, targetLatLng)
             print("Data sent:", data)
 
 if __name__ == "__main__":
