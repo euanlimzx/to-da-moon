@@ -17,24 +17,25 @@ app.use(
 app.use(express.json());
 
 const server = createServer(app);
+
 const io = initializeWebSockets(server);
 const configFilePath = path.join(__dirname, "live-config.json");
 
 // make the websocket a global variable that is available to all
 app.set("io", io);
 
-io.on("connection", (socket)=> {
+io.on("connection", (socket) => {
   console.log(`Client connected: ${socket.id}`);
 
   socket.on("joinRoom", (roomCode: string) => {
-    socket.join(roomCode)
+    socket.join(roomCode);
     console.log(`Client joined room: ${roomCode}`);
-  })
+  });
 
-  socket.on("countDown", (roomCode: string) =>{
-    startCountdown(roomCode)
-  })
-})
+  socket.on("countDown", (roomCode: string) => {
+    startCountdown(roomCode);
+  });
+});
 
 //countdown helper
 function startCountdown(roomCode: string) {
@@ -49,7 +50,6 @@ function startCountdown(roomCode: string) {
     }
   }, 1000);
 }
-
 
 // POST route to update config
 app.post("/live/config", (req, res) => {

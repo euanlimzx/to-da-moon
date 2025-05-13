@@ -10,6 +10,7 @@ export function initializeWebSockets(httpServer: HttpServer): Server {
       origin: "*", //todo @Euan, configure this to allow from our frontend only
       methods: ["GET", "POST"],
     },
+    maxHttpBufferSize: 5e6,
   });
 
   io.on("connection", (socket: StaticDataStreamSocket) => {

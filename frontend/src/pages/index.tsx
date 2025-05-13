@@ -49,10 +49,6 @@ export default function Home() {
     socket.on('connect', () => {
       console.log('connected', socket.id)
     })
-
-    socket.on('live/broadcast-data-stream', (message) => {
-      setValues(message)
-    })
     socket.on('live/config', (message) => {
       setConfig(message)
     })
@@ -71,11 +67,11 @@ export default function Home() {
     })
 
     return () => {
-      socket.off('connect')
-      socket.off('countDown')
-      socket.off('live/broadcast-data-stream')
-      socket.off('live/broadcast-data-stream-latlng')
-      socket.off('live/update-config')
+      socket.removeAllListeners('connect')
+      socket.removeAllListeners('countDown')
+      socket.removeAllListeners('live/broadcast-data-stream')
+      socket.removeAllListeners('live/broadcast-data-stream-latlng')
+      socket.removeAllListeners('live/config')
     }
   }, [isAdminMode])
 
@@ -120,7 +116,7 @@ export default function Home() {
             target={targetLatLng}
           />
         )}
-        <Object isPhonePortrait={isPhonePortrait} drawerOpen={drawerOpen} />
+        {/* <Object isPhonePortrait={isPhonePortrait} drawerOpen={drawerOpen} /> */}
       </div>
     </div>
   )
