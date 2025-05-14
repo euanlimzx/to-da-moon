@@ -8,3 +8,12 @@ inet6 fe80::1cfe:b0ff:fe02:1d26%en0 prefixlen 64 secured scopeid 0x4
 ether 1a:cf:b0:02:1d:26
 
 Here, the IPv4 address is 192.168.1.104.
+
+run with the command
+npm run dev -- -H 0.0.0.0 -p 3001
+
+acceess the frontend from 192.168.1.100:3001
+
+backend will be http://192.168.0.100:3000/, so change ur env to
+
+NEXT_PUBLIC_WEBSOCKET_DOMAIN=http://192.168.0.100:3000/
